@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Register } from './Components/Auth/Register';
-import  MediaDisplay  from './Components/Media/MediaIndex'
-import MediaIndex from './Components/Media/MediaIndex';
-import {Auth} from './Components/Auth/Auth';
+import MediaDisplay from './Components/Media/MediaIndex'
+// import MediaIndex from './Components/Media/MediaIndex';
+import { Auth } from './Components/Auth/Auth';
 
-// type currentSession  = {
-//   sessionToken: string | null
-// }
 
-const App: React.FC = props => {
-  // const [sessionToken, setSessionToken] = useState('')
+export class App extends Component<{}, { token: string | null }> {
+  constructor(props: any) {
+    super(props);
+    this.updateToken = this.updateToken.bind(this);
+    this.clearToken = this.clearToken.bind(this);
+    this.getToken = this.getToken.bind(this);
+    this.state = { token: null };
+  }
 
 
   // useEffect(() =>{
@@ -20,27 +23,55 @@ const App: React.FC = props => {
   //   }
   // })
 
-  // const updateToken = (newToken: string) =>{
-  //   localStorage.setItem('token', newToken);
-  //   setSessionToken(newToken);
-  //   console.log(sessionToken);
-    
-  // }
-  // const clearToken = () =>{
-  //   localStorage.clear();
-  //   setSessionToken('')
-  // }
+  updateToken(newToken: string) {
+    this.setState({ token: newToken });
+    localStorage.setItem("token", newToken)
+    console.log(newToken);
+  }
 
-  // const protectedViews = () =>{
-  //   return(sessionToken === localStorage.getItem('token') ? <MediaIndex token={sessionToken}/> : <Auth updateToken={updateToken}/>)
-  // }
-  return (
-    <div className="App">
-      {/* <Register updateSessionToken={updateToken}/> */}
-      <MediaDisplay />
-      {/* <Auth updateToken={updateToken}/> */}
-    </div>
-  );
+
+  clearToken() {
+    localStorage.clear();
+    this.setState({ token: null })
+  }
+
+  getToken() {
+    return this.state.token
+  }
+
+  componentDidMount() {
+    this.getToken()
+  }
+
+  protectedViews() {
+    return (this.state.token === localStorage.getItem('token') ? <MediaDisplay getToken={this.getToken} /> : <Auth updateToken={this.updateToken} />)
+  }
+
+  render() {
+
+    // const loggedIn = this.state.token
+    // let view;
+    // if (loggedIn) {
+    //   view = (
+    //     <div>
+    //     <MediaDisplay getToken={this.getToken} />
+    //     </div>
+    //   )
+    // } else {
+    //   <div>
+    //   <Auth updateToken={this.updateToken} />
+    //   </div>
+    // }
+    return (
+      <div className="App">
+        {/* {view} */}
+        {/* {/* {<Register updateSessionToken={updateToken}/> */}
+        {this.protectedViews()}
+        {/* <Auth updateToken={this.updateToken} />
+        <MediaDisplay getToken={this.getToken}/> */}
+      </div>
+    );
+  }
 }
 
 export default App;

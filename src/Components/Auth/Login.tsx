@@ -38,7 +38,8 @@ export class Login extends Component<AcceptedProps, UserInfo>{
         .then(
             (res) => res.json()
         ).then((data) =>{
-            this.props.updateToken(data.sessionToken)
+            console.log("DATA: ", data);
+            this.props.updateToken(data.token);
         })
     }
 
@@ -50,8 +51,9 @@ export class Login extends Component<AcceptedProps, UserInfo>{
                         <Label htmlFor="email">Email:</Label>
                         <Input onChange={(e) => this.setState({email: e.target.value})} name="email" value={this.state.email}/>
                         <Label htmlFor="password">Password:</Label>
-                        <Input onChange={(e) => this.setState({password: e.target.value})} name="password" value={this.state.password}/>
+                        <Input onChange={(e) => this.setState({password: e.target.value})} name="password" type="password" value={this.state.password}/>
                     </FormGroup>
+                    <Button type="submit">Login</Button>
                 </Form>
             </div>
         )

@@ -32,7 +32,7 @@ const BookDisplay: React.FC<BookProps> = props => {
     // })
 
     const fetchBook = async () => {
-        fetch(`http://localhost:3005/movie/all`, {
+        fetch(`http://localhost:3005/book/all`, {
             method: "GET",
             headers: new Headers({
                 "Content-Type": 'application/json'
@@ -41,6 +41,8 @@ const BookDisplay: React.FC<BookProps> = props => {
             .then((res) => res.json())
             .then((books) => {
                 setBooks(books)
+                console.log(books);
+                
             })
     }
 
@@ -50,13 +52,15 @@ const BookDisplay: React.FC<BookProps> = props => {
 
     return (
         <div>
-            {books.map(books => {
+            {books.map((book, index) => {
+                return(
                 <Card>
                     <CardContent>
                             <h4>0</h4>
-                        <h2>{books.title}</h2>
+                        <h2>{book.title}</h2>
                     </CardContent>
                 </Card>
+                )
             })}
         </div>
     )

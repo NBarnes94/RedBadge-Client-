@@ -23,62 +23,62 @@ export interface VGInfo {
     owner_id: number
 }
 
-type VGState{
-    vgStuff: [VGInfo]
-}
+// type VGState{
+//     vgStuff: [VGInfo]
+// }
 
-export class VGDisplay extends Component<{}, VGState>{
-    constructor(props: {}) {
-        super(props);
-        this.state = {
-            id: 0,
-            title: "",
-            genre: "",
-            developer: "",
-            platform: "",
-            description: "",
-            status: "",
-            owner_id: 1
-        }
-    }
+// export class VGDisplay extends Component<{}, VGState>{
+//     constructor(props: {}) {
+//         super(props);
+//         this.state = {
+//             id: 0,
+//             title: "",
+//             genre: "",
+//             developer: "",
+//             platform: "",
+//             description: "",
+//             status: "",
+//             owner_id: 1
+//         }
+//     }
 
-    componentDidMount(){
-        this.fetchVG();
-    }
+//     componentDidMount(){
+//         this.fetchVG();
+//     }
 
-    fetchVG = () => {
-        fetch(`http://localhost:3005/videoGames/all`, {
-            method: "GET",
-            headers: new Headers({
-                "Content-Type": 'application/json'
-            })
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                this.setState(vgStuff: data.videoGames)
-                console.log(data);
+//     fetchVG = () => {
+//         fetch(`http://localhost:3005/videoGames/all`, {
+//             method: "GET",
+//             headers: new Headers({
+//                 "Content-Type": 'application/json'
+//             })
+//         })
+//             .then((res) => res.json())
+//             .then((data) => {
+//                 this.setState(vgStuff: data.videoGames)
+//                 console.log(data);
 
-            })
-    }
+//             })
+//     }
 
-    render() {
-        return (
-            <div>
-            {videogames.map(videogames => {
-                <Card>
-                    <CardContent>
-                        <h4>0</h4>
-                        <h2>{videogames.title}</h2>
-                        <Button >Details</Button>
-                    </CardContent>
-                </Card>
-            })}
-        </div>
-        )
-    }
-}
+//     render() {
+//         return (
+//             <div>
+//             {videogames.map(videogames => {
+//                 <Card>
+//                     <CardContent>
+//                         <h4>0</h4>
+//                         <h2>{videogames.title}</h2>
+//                         <Button >Details</Button>
+//                     </CardContent>
+//                 </Card>
+//             })}
+//         </div>
+//         )
+//     }
+// }
 
-const VGDisplay1: React.FC<VGProps> = props => {
+const VGDisplay: React.FC<VGProps> = props => {
 
     const [videogames, setVideoGames] = useState<VGInfo[]>([]);
     // ({
@@ -113,14 +113,18 @@ const VGDisplay1: React.FC<VGProps> = props => {
 
     return (
         <div>
-            {videogames.map(videogames => {
+            <h1>VideoGame</h1>
+            {videogames.map((videogame, index) => {
+                return  (
                 <Card>
                     <CardContent>
-                        <h4>0</h4>
-                        <h2>{videogames.title}</h2>
+
+                        <h4 key={index}>0</h4>
+                        <h2>{videogame.title}</h2>
                         <Button >Details</Button>
                     </CardContent>
                 </Card>
+                )
             })}
         </div>
     )

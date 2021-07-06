@@ -53,13 +53,15 @@ const MovieDisplay: React.FC<MovieProps> = props => {
 
     return (
         <div>
-            {movies.map(movies => {
+            {movies.map((movies, index )=> {
+                return(
                 <Card>
                     <CardContent>
-                            <h4>0</h4>
+                            <h4 key={index}>0</h4>
                         <h2>{movies.title}</h2>
                     </CardContent>
                 </Card>
+                )
             })}
         </div>
     )

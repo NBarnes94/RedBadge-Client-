@@ -1,21 +1,24 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, Component} from 'react'
 import {makeStyles, Card, CardActions, CardContent, Button } from "@material-ui/core"
 import {VGInfo} from './ShowVG';
 import {BookInfo} from './ShowBook';
 import {MovieInfo} from './ShowMovie'
 import MovieDisplay from './ShowMovie'
 import VGDisplay from './ShowVG'
+import BookDisplay  from './ShowBook';
+import { render } from '@testing-library/react';
 // main view functionality
 
-interface IProps { }
+interface Props {
+    getToken(): string | null
+}
 
-const MediaDisplay: React.FC<IProps> = props =>{
+export class MediaDisplay extends Component <Props, {}> {
+    constructor(props: Props){
+        super(props)
 
-    const [movies, setMovies]  = useState<MovieInfo[]>([])
-    const [videogame, SetVideogames] = useState<VGInfo[]>([]);
-    const [books, setBooks] = useState<BookInfo[]>([]);
-
-    const fetchMovie = async () =>{
+    }
+    fetchMovie = async () =>{
         fetch(`http://localhost:3005/movie/all`, {
             method: "GET", 
             headers: new Headers({
@@ -24,12 +27,12 @@ const MediaDisplay: React.FC<IProps> = props =>{
         })
         .then((res) => res.json())
         .then((movies) =>{
-            setMovies(movies)
+            this.setState(movies)
             console.log(movies);
             
         })
     }
-    const fetchVG = async () =>{
+    fetchVG = async () =>{
         fetch(`http://localhost:3005/videoGames/all`, {
             method: "GET", 
             headers: new Headers({
@@ -38,12 +41,12 @@ const MediaDisplay: React.FC<IProps> = props =>{
         })
         .then((res) => res.json())
         .then((videogames) =>{
-            SetVideogames(videogames)
+            this.setState(videogames)
             console.log(videogames);
             
         })
     }
-    const fetchBook = async () =>{
+    fetchBook = async () =>{
         fetch(`http://localhost:3005/Books/all`, {
             method: "GET", 
             headers: new Headers({
@@ -51,25 +54,39 @@ const MediaDisplay: React.FC<IProps> = props =>{
             })
         })
         .then((res) => res.json())
-        .then((movies) =>{
-            setBooks(movies)
+        .then((books) =>{
+            this.setState(books)
         })
     }
 
+    fetchUser = async () =>{
+        fetch(`http://localhost:3005/user/get`, {
+            method: "GET",
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Authorization": this.getToken
+            })
+        })
+    }
 
-    useEffect(() =>{
-        // fetchMovie(),
-        // fetchVG()
-        // fetchBook()
-    }, [])
+    componentDidMount(){
+        this.fetchMovie()
+        this.fetchVG()
+        this.fetchBook()
+        this.fetchUser()
+    }
 
+
+    render(){
     return(
         <div>
-            {/* <MovieDisplay fetchMovie={fetchMovie}/>  */}
+
             <MovieDisplay />
             <VGDisplay />
+            <BookDisplay />
         </div>
     )
+}
 }
 
 export default MediaDisplay;

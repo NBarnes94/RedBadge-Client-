@@ -1,16 +1,21 @@
 
 import React, { useEffect, useState, Component } from 'react'
-import { makeStyles, Card, CardActions, CardContent, Button } from "@material-ui/core"
+import { makeStyles, Button } from "@material-ui/core"
 import { Interface } from 'readline'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { type, UserInfo } from 'os'
-
+import { Card, CardTitle, CardText, Row, Col } from 'reactstrap'
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import { render } from '@testing-library/react'
+import VGDetails from './DetailVG'
 
 
 // import  {video} from'@fortawesome/fontawesome-svg-core'
 // will build out the 
 
-export interface VGProps { }
+export interface VGProps {
+    sessionToken: string | null
+}
 
 export interface VGInfo {
     id: number,
@@ -20,114 +25,65 @@ export interface VGInfo {
     platform: string,
     description: string,
     status: string,
-    owner_id: number
+}
+type VGData = {
+    videogames: VGInfo[]
 }
 
-// type VGState{
-//     vgStuff: [VGInfo]
-// }
-
-// export class VGDisplay extends Component<{}, VGState>{
-//     constructor(props: {}) {
-//         super(props);
-//         this.state = {
-//             id: 0,
-//             title: "",
-//             genre: "",
-//             developer: "",
-//             platform: "",
-//             description: "",
-//             status: "",
-//             owner_id: 1
-//         }
-//     }
-
-//     componentDidMount(){
-//         this.fetchVG();
-//     }
-
-//     fetchVG = () => {
-//         fetch(`http://localhost:3005/videoGames/all`, {
-//             method: "GET",
-//             headers: new Headers({
-//                 "Content-Type": 'application/json'
-//             })
-//         })
-//             .then((res) => res.json())
-//             .then((data) => {
-//                 this.setState(vgStuff: data.videoGames)
-//                 console.log(data);
-
-//             })
-//     }
-
-//     render() {
-//         return (
-//             <div>
-//             {videogames.map(videogames => {
-//                 <Card>
-//                     <CardContent>
-//                         <h4>0</h4>
-//                         <h2>{videogames.title}</h2>
-//                         <Button >Details</Button>
-//                     </CardContent>
-//                 </Card>
-//             })}
-//         </div>
-//         )
-//     }
-// }
-
-const VGDisplay: React.FC<VGProps> = props => {
-
-    const [videogames, setVideoGames] = useState<VGInfo[]>([]);
-    // ({
-    //     id: null,
-    //     title: null,
-    //     genre: null,
-    //     studio: null, 
-    //     runTime: null,
-    //     description: null,
-    //     status: null,
-    //     owner_id: null 
-    // })
-
-    const fetchVG = async () => {
-        fetch(`http://localhost:3005/videoGames/all`, {
-            method: "GET",
-            headers: new Headers({
-                "Content-Type": 'application/json'
-            })
-        })
-            .then((res) => res.json())
-            .then((videogames) => {
-                setVideoGames(videogames)
-                console.log(videogames);
-
-            })
+export class VGDisplay extends Component<VGProps, VGData>{
+    constructor(props: VGProps) {
+        super(props)
+        this.state = {
+            videogames:[{
+            id: 0,
+            title: "",
+            genre: "",
+            developer: "",
+            platform: "",
+            description: "",
+            status: "",
+        }]
+        }
     }
-
-    useEffect(() => {
-        fetchVG()
-    }, [])
-
-    return (
-        <div>
-            <h1>VideoGame</h1>
-            {videogames.map((videogame, index) => {
-                return  (
-                <Card>
-                    <CardContent>
-
-                        <h4 key={index}>0</h4>
-                        <h2>{videogame.title}</h2>
-                        <Button >Details</Button>
-                    </CardContent>
-                </Card>
-                )
-            })}
-        </div>
-    )
+    fetchVG = async () => {
+    fetch(`http://localhost:3005/videoGames/all`, {
+        method: "GET",
+        headers: new Headers({
+            "Content-Type": 'application/json'
+        })
+    })
+        .then((res) => res.json())
+        .then((videogames) => {
+            console.log(videogames);
+            this.setState({ videogames: videogames })
+        })
 }
 
-export default VGDisplay;
+componentDidMount(){
+    this.fetchVG();
+}
+
+    render() {
+        return (
+            <div>
+                <h1>VideoGame</h1>
+                {this.state.videogames.map((videogame, index) => {
+                    return (
+                        <div>
+                            <Card>
+                                <CardTitle>
+                                    <h4 key={index}>0</h4>
+                                    <h2>{videogame.title}</h2>
+                                </CardTitle>
+                                <Button
+                                onClick={() => <VGDetails sessionToken={this.props.sessionToken} fetchVG={this.fetchVG}/>}
+                                >Details</Button>
+                            </Card>
+                        </div>
+                    )
+                })}
+            </div>
+        )
+    }
+}
+

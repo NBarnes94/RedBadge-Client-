@@ -5,15 +5,22 @@ import { Register } from './Components/Auth/Register';
 import MediaDisplay from './Components/Media/MediaIndex'
 // import MediaIndex from './Components/Media/MediaIndex';
 import { Auth } from './Components/Auth/Auth';
+import RouteDom from './Components/Routes/Switch'
+import {BrowserRouter as Router} from 'react-router-dom';
+import { faWindowRestore } from '@fortawesome/free-solid-svg-icons';
+import  BigNavbar from './Components/Navbar/Navbar';
 
+type CurrentSession = {
+  sessionToken: string | null
+}
 
-export class App extends Component<{}, { token: string | null }> {
+export class App extends Component<{}, CurrentSession> {
   constructor(props: any) {
     super(props);
     this.updateToken = this.updateToken.bind(this);
     this.clearToken = this.clearToken.bind(this);
     this.getToken = this.getToken.bind(this);
-    this.state = { token: null };
+    this.state = { sessionToken: '' };
   }
 
 
@@ -24,7 +31,7 @@ export class App extends Component<{}, { token: string | null }> {
   // })
 
   updateToken(newToken: string) {
-    this.setState({ token: newToken });
+    this.setState({ sessionToken: newToken });
     localStorage.setItem("token", newToken)
     console.log(newToken);
   }
@@ -32,11 +39,12 @@ export class App extends Component<{}, { token: string | null }> {
 
   clearToken() {
     localStorage.clear();
-    this.setState({ token: null })
+    this.setState({ sessionToken: null })
+    window.location.reload()
   }
 
   getToken() {
-    return this.state.token
+    return this.state.sessionToken
   }
 
   componentDidMount() {
@@ -44,31 +52,19 @@ export class App extends Component<{}, { token: string | null }> {
   }
 
   protectedViews() {
-    return (this.state.token === localStorage.getItem('token') ? <MediaDisplay getToken={this.getToken} /> : <Auth updateToken={this.updateToken} />)
+    return (this.state.sessionToken === "" ? <Auth updateToken={this.updateToken}/>  : <MediaDisplay sessionToken={this.state.sessionToken} />)
   }
 
   render() {
 
-    // const loggedIn = this.state.token
-    // let view;
-    // if (loggedIn) {
-    //   view = (
-    //     <div>
-    //     <MediaDisplay getToken={this.getToken} />
-    //     </div>
-    //   )
-    // } else {
-    //   <div>
-    //   <Auth updateToken={this.updateToken} />
-    //   </div>
-    // }
+    const sessionToken: string | null = localStorage.getItem('token');
     return (
       <div className="App">
-        {/* {view} */}
-        {/* {/* {<Register updateSessionToken={updateToken}/> */}
+        <Router>
+        <BigNavbar updateToken={this.updateToken} sessionToken={this.state.sessionToken} clearSession={this.clearToken}/>
+        <RouteDom updateToken={this.updateToken} sessionToken={this.state.sessionToken} clearSession={this.clearToken}/>
         {this.protectedViews()}
-        {/* <Auth updateToken={this.updateToken} />
-        <MediaDisplay getToken={this.getToken}/> */}
+        </Router>
       </div>
     );
   }

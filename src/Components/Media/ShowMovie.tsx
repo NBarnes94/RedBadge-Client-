@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import { makeStyles, Card, CardActions, CardContent, Button } from "@material-ui/core"
+import React, { useEffect, useState, Component } from 'react'
+import { makeStyles, CardActions, CardContent, Button } from "@material-ui/core"
 import { Interface } from 'readline'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Card, CardTitle, CardText, Row, Col } from 'reactstrap'
 // import  {video} from'@fortawesome/fontawesome-svg-core'
 // will build out the 
 
-export interface MovieProps { }
+export interface MovieProps {
+    sessionToken: string | null
+}
 
 export interface MovieInfo {
     id: number,
@@ -15,12 +18,28 @@ export interface MovieInfo {
     runTime: string,
     description: string,
     status: string,
-    owner_id: number
 }
 
-const MovieDisplay: React.FC<MovieProps> = props => {
+type MovieData = {
+    movies: MovieInfo[]
+}
 
-    const [movies, setMovies] = useState<MovieInfo[]>([]);
+export default class MovieDisplay extends Component<MovieProps, MovieData>{
+    constructor(props: MovieProps) {
+        super(props)
+        this.state = {
+            movies: [{
+                id: 0,
+                title: "",
+                genre: "",
+                studio: "",
+                runTime: "",
+                description: "",
+                status: "",
+            }]
+        }
+    }
+
     // ({
     //     id: null,
     //     title: null,
@@ -32,7 +51,7 @@ const MovieDisplay: React.FC<MovieProps> = props => {
     //     owner_id: null 
     // })
 
-    const fetchMovie = async () => {
+    fetchMovie = async () => {
         fetch(`http://localhost:3005/movie/all`, {
             method: "GET",
             headers: new Headers({
@@ -41,30 +60,34 @@ const MovieDisplay: React.FC<MovieProps> = props => {
         })
             .then((res) => res.json())
             .then((movies) => {
-                setMovies(movies)
                 console.log(movies);
-                
+                this.setState({ movies: movies })
+
             })
     }
 
-    useEffect(() => {
-        fetchMovie()
-    }, [])
+    componentDidMount() {
+        this.fetchMovie()
+    }
 
-    return (
-        <div>
-            {movies.map((movies, index )=> {
-                return(
-                <Card>
-                    <CardContent>
-                            <h4 key={index}>0</h4>
-                        <h2>{movies.title}</h2>
-                    </CardContent>
-                </Card>
-                )
-            })}
-        </div>
-    )
+    render() {
+        return (
+            <div>
+                {this.state.movies.map((movie, index) => {
+                    return (
+                        <Card>
+                            <CardTitle>
+                                <h4 key={index}>0</h4>
+                                <h2>{movie.title}</h2>
+                            </CardTitle>
+                            <Button
+                            // onClick={() => <VGDetails sessionToken={this.props.sessionToken}/>}
+                            >Details</Button>
+                        </Card>
+                    )
+                })}
+            </div>
+        )
+    }
 }
 
-export default MovieDisplay;

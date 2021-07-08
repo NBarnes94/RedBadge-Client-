@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Typography } from '@material-ui/core'
 import { render } from '@testing-library/react'
 import { Card, CardTitle, CardText, Row, Col } from 'reactstrap'
+import BookDetails from './BookDetails'
+import APIUrl from '../helpers/environment'
 
 // import  {video} from'@fortawesome/fontawesome-svg-core'
 // will build out the import React from 'react'
@@ -43,7 +45,7 @@ export default class BookDisplay extends Component<BookProps, BookData>{
     }
 
     fetchBook = async () => {
-        fetch(`http://localhost:3005/book/all`, {
+        fetch(`${APIUrl}/book/all`, {
             method: "GET",
             headers: new Headers({
                 "Content-Type": 'application/json'
@@ -57,21 +59,23 @@ export default class BookDisplay extends Component<BookProps, BookData>{
             })
     }
 
+componentDidMount(){
+    this.fetchBook()
+}
 
 
     render() {
         return (
             <div>
+                <h1>Books: </h1>
                 {this.state.books.map((book, index) => {
                     return (
-                        <Card>
+                        <Card className="card" key={index}>
                             <CardTitle>
-                                    <h4 key={index}>0</h4>
+                                    <img src="./assets/book.pgn" alt="bookIcon"/>
                                     <h2>{book.title}</h2>
                                 </CardTitle>
-                                <Button
-                                // onClick={() => <VGDetails sessionToken={this.props.sessionToken}/>}
-                                >Details</Button>
+                                <BookDetails sessionToken={this.props.sessionToken} title={book.title} genre={book.genre} author={book.author} description={book.description} status={book.status} />
                             </Card>
                     )
                 })}

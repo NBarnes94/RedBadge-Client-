@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap'
 import { useState, useEffect } from 'react'
+import APIUrl from '../helpers/environment';
 
 
 type UserInfo = {
@@ -29,7 +30,7 @@ export class Register extends Component<AcceptedProps, UserInfo>{
     handleSubmit = (e: any) => {
         e.preventDefault();
 
-        fetch(`http://localhost:3005/user/register`, {
+        fetch(`${APIUrl}/user/register`, {
 
             method: 'POST',
 

@@ -1,25 +1,27 @@
 import React, { Component } from 'react'
-import { VGProps } from './ShowVG'
-import { VGInfo } from './ShowVG'
+import { MovieInfo } from './ShowMovie'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import {Button} from "@material-ui/core"
 
 
-type VGDProps = {
+type MovieDProps = {
+    // modalOn: boolean,
     sessionToken: string | null,
     title: string,
     genre: string,
-    developer: string,
-    platform: string,
+    studio: string,
+    runTime: string,
     description: string,
     status: string,
-}
-type VGDetail={
-    modal:boolean
+    // toggle: boolean
 }
 
-export default class VGDetails extends Component<VGDProps, VGDetail>{
-    constructor(props: VGDProps) {
+type MovieDetail ={
+    modal: boolean
+}
+
+export default class MovieDetails extends Component<MovieDProps, MovieDetail>{
+    constructor(props: MovieDProps) {
         super(props)
         this.state={
             modal: false
@@ -40,21 +42,19 @@ export default class VGDetails extends Component<VGDProps, VGDetail>{
                 <Modal 
                 isOpen={this.state.modal} fade={true} toggle={this.toggle}
                 >
-                    <ModalHeader 
-                    toggle={this.toggle}
-                    >
+                    <ModalHeader toggle={this.toggle}>
                         {this.props.title}
                     </ModalHeader>
                     <ModalBody>
                         <ol>
                             <li>{this.props.genre}</li>
-                            <li>{this.props.platform}</li>
-                            <li>{this.props.developer}</li>
+                            <li>{this.props.studio}</li>
+                            <li>{this.props.runTime}</li>
                             <li>{this.props.status}</li>
                             <li>{this.props.description}</li>
                         </ol>
                     </ModalBody>
-                </Modal> 
+                </Modal>
             </div>
         )
     }

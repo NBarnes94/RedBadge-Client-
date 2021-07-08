@@ -52,7 +52,7 @@ export class App extends Component<{}, CurrentSession> {
   }
 
   protectedViews() {
-    return (this.state.sessionToken === "" ? <Auth updateToken={this.updateToken}/>  : <MediaDisplay sessionToken={this.state.sessionToken} />)
+    return (this.state.sessionToken === "" || undefined ? <Auth updateToken={this.updateToken}/>  : <MediaDisplay sessionToken={this.state.sessionToken} />)
   }
 
   render() {

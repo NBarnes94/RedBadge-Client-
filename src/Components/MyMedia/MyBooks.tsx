@@ -1,98 +1,88 @@
-
-import React, { useEffect, useState } from 'react'
-import { makeStyles, Card, CardActions, CardContent, Button } from "@material-ui/core"
+import React, { useEffect, useState, Component } from 'react'
+import { makeStyles, Button } from "@material-ui/core"
 import { Interface } from 'readline'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Typography } from '@material-ui/core'
+import { type, UserInfo } from 'os'
+import { Card, CardTitle, CardText, Row, Col } from 'reactstrap'
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import { render } from '@testing-library/react'
+import MyBookDetails from './MyBookDetails'
+import APIUrl from '../helpers/environment'
+
 
 // import  {video} from'@fortawesome/fontawesome-svg-core'
-// will build out the import React from 'react'
+// will build out the 
 
-
-export interface BookProps { 
-    sessionToken: string | null
+export interface BookDProps {
+    sessionToken: string | null,
 }
 
-export interface BookInfo {
+export interface BookDInfo {
     id: number,
     title: string,
     genre: string,
     author: string,
     description: string,
     status: string,
-    owner_id: number
+}
+type BookDData = {
+    book: BookDInfo[]
 }
 
-const BookDisplay: React.FC<BookProps> = props => {
-
-    const useStyles = makeStyles({
-        root: {
-            minWidth: 275,
-        },
-        bullet: {
-            display: 'inline-block',
-            margin: '0 2px',
-            transform: 'scale(0.8)',
-        },
-        title: {
-            fontSize: 14,
-        },
-        pos: {
-            marginBottom: 12,
-        },
-    })
-    const [books, setBooks] = useState<BookInfo[]>([]);
-    // ({
-    //     id: null,
-    //     title: null,
-    //     genre: null,
-    //     studio: null, 
-    //     runTime: null,
-    //     description: null,
-    //     status: null,
-    //     owner_id: null 
-    // })
-
-    const fetchBook = async () => {
-        fetch(`http://localhost:3005/book/all`, {
-            method: "GET",
-            headers: new Headers({
-                "Content-Type": 'application/json'
-                // "Authorization": sessionToken={this.props.sessionToken}
-            })
-        })
-            .then((res) => res.json())
-            .then((books) => {
-                setBooks(books)
-                console.log(books);
-
-            })
+export class MyBooks extends Component<BookDProps, BookDData>{
+    constructor(props: BookDProps) {
+        super(props)
+        this.state = {
+            book:[{
+            id: 0,
+            title: "",
+            genre: "",
+            author: "",
+            description: "",
+            status: "",
+        }]
+        }
     }
-    const classes = useStyles();
-
-    useEffect(() => {
-        fetchBook()
-    }, [])
-
-    return (
-        <div>
-            {books.map((book, index) => {
-                return (
-                    <Card className="class.root">
-                        <CardContent>
-                                <h4>0</h4>
-                            <Typography className={classes.title}>
-                                <h2>{book.title}</h2>
-                            </Typography>
-                        </CardContent>
-                        <CardActions>
-                            <Button >Details</Button>
-                        </CardActions>
-                    </Card>
-                )
-            })}
-        </div>
-    )
+    fetchVG = async () => {
+    fetch(`${APIUrl}/book/`, {
+        method: "GET",
+        headers: new Headers({
+            "Content-Type": 'application/json', 
+            "Authorization": `${localStorage.getItem('token')}`
+        })
+    })
+        .then((res) => res.json())
+        .then((book) => {
+            console.log(book);
+            this.setState({ book: book })
+        })
 }
 
-export default BookDisplay;
+componentDidMount(){
+    this.fetchVG();
+    console.log(localStorage.getItem('token'));
+    
+}
+
+    render() {
+        return (
+            <div>
+                <h1>My VideoGames: </h1>
+                {this.state.book.map((book, index) => {
+                    return (
+                        <div>
+                            <Card className="card">
+                                <CardTitle>
+                                    <h4 key={index}>0</h4>
+                                    <h2>{book.title}</h2>
+                                </CardTitle>
+                                
+                            <MyBookDetails sessionToken={this.props.sessionToken} title={book.title} genre={book.genre} author={book.author} description={book.description} status={book.status} /> 
+                            </Card>
+                        </div>
+                    )
+                })}
+            </div>
+        )
+    }
+}

@@ -8,13 +8,15 @@ import { Card, CardTitle, CardText, Row, Col } from 'reactstrap'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import { render } from '@testing-library/react'
 import VGDetails from './DetailVG'
+import APIUrl from '../helpers/environment'
 
 
 // import  {video} from'@fortawesome/fontawesome-svg-core'
 // will build out the 
 
 export interface VGProps {
-    sessionToken: string | null
+    sessionToken: string | null,
+    // VGModal: []
 }
 
 export interface VGInfo {
@@ -46,7 +48,7 @@ export class VGDisplay extends Component<VGProps, VGData>{
         }
     }
     fetchVG = async () => {
-    fetch(`http://localhost:3005/videoGames/all`, {
+    fetch(`${APIUrl}/videoGames/all`, {
         method: "GET",
         headers: new Headers({
             "Content-Type": 'application/json'
@@ -66,18 +68,17 @@ componentDidMount(){
     render() {
         return (
             <div>
-                <h1>VideoGame</h1>
+                <h1>VideoGames: </h1>
                 {this.state.videogames.map((videogame, index) => {
                     return (
                         <div>
-                            <Card>
+                            <Card className="card" key={index}>
                                 <CardTitle>
-                                    <h4 key={index}>0</h4>
+                                    <img src="./assets/videogame.png" alt="videoGameIcon"/>
                                     <h2>{videogame.title}</h2>
                                 </CardTitle>
-                                <Button
-                                onClick={() => <VGDetails sessionToken={this.props.sessionToken} fetchVG={this.fetchVG}/>}
-                                >Details</Button>
+                                
+                            <VGDetails sessionToken={this.props.sessionToken} title={videogame.title} genre={videogame.genre} developer={videogame.developer} platform={videogame.platform} description={videogame.description} status={videogame.status} /> 
                             </Card>
                         </div>
                     )

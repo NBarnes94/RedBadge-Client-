@@ -9,6 +9,8 @@ import BookDisplay from './ShowBook';
 import { render } from '@testing-library/react';
 import { getTokenSourceMapRange } from 'typescript';
 import userEvent from '@testing-library/user-event';
+import APIUrl from '../helpers/environment';
+import VGDetails from './DetailVG';
 // main view functionality
 
 export interface Props {
@@ -17,18 +19,26 @@ export interface Props {
 
 type User = {
     firstName: string
+    videogames: [],
+    movies: [],
+    books:[],
+    modal: boolean
 }
 
 export class MediaDisplay extends Component<Props, User> {
     constructor(props: Props) {
         super(props)
         this.state = {
-            firstName: ""
+            firstName: "",
+            videogames: [],
+            movies: [],
+            books: [],
+            modal: false
         }
     }
 
     fetchMovie = async () => {
-        fetch(`http://localhost:3005/movie/all`, {
+        fetch(`${APIUrl}/movie/all`, {
             method: "GET",
             headers: new Headers({
                 "Content-Type": 'application/json'
@@ -42,7 +52,7 @@ export class MediaDisplay extends Component<Props, User> {
             })
     }
     fetchVG = async () => {
-        fetch(`http://localhost:3005/videoGames/all`, {
+        fetch(`${APIUrl}/videoGames/all`, {
             method: "GET",
             headers: new Headers({
                 "Content-Type": 'application/json'
@@ -55,8 +65,9 @@ export class MediaDisplay extends Component<Props, User> {
 
             })
     }
+
     fetchBook = async () => {
-        fetch(`http://localhost:3005/Books/all`, {
+        fetch(`${APIUrl}/book/all`, {
             method: "GET",
             headers: new Headers({
                 "Content-Type": 'application/json'
@@ -66,27 +77,27 @@ export class MediaDisplay extends Component<Props, User> {
             .then((books) => {
                 this.setState(books)
             })
-    }
+        }
     
     fetchUser = async () => {
         console.log("Function working");
         console.log(localStorage.getItem('token'));
         
-        fetch(`http://localhost:3005/user/get`, {
+        fetch(`${APIUrl}/user/get`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `${localStorage.getItem('token')}`
             }
         })
-            .then(console.log)
-            // .then((user) => {
-            //     console.log(user);
-            //     this.setState({ firstName: user })
-            //     console.log(this.state.firstName);
+            .then((res)=> res.json)
+            .then((user) => {
+                console.log(user);
+                // this.setState({  firstName: user })
+                console.log(this.state.firstName);
                 
                 
-            // })
+            })
     }
 
     componentDidMount() {
@@ -106,11 +117,14 @@ export class MediaDisplay extends Component<Props, User> {
                     <h1>Welcome {this.state.firstName}</h1>
                 </div>
 
-                <h3>Movies: </h3>
-                <MovieDisplay sessionToken={this.props.sessionToken} />
-                <h3>Video Games: </h3>
-                <VGDisplay sessionToken={this.props.sessionToken} />
-                <h3>Books: </h3>
+                <MovieDisplay sessionToken={this.props.sessionToken} 
+                // modalOn={this.modalOn}
+                />
+
+                <VGDisplay sessionToken={this.props.sessionToken} 
+                // VGModal={this.VGModal}
+                />
+
                 <BookDisplay sessionToken={this.props.sessionToken} />
             </div>
         )

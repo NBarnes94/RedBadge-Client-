@@ -1,25 +1,22 @@
-import React, { Component } from 'react'
-import { VGProps } from './ShowVG'
-import { VGInfo } from './ShowVG'
+import React, {Component} from 'react'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import {Button} from "@material-ui/core"
 
 
-type VGDProps = {
+type MyBookDProps = {
     sessionToken: string | null,
     title: string,
     genre: string,
-    developer: string,
-    platform: string,
+    author: string,
     description: string,
     status: string,
 }
-type VGDetail={
+type MyBookDDetail={
     modal:boolean
 }
 
-export default class VGDetails extends Component<VGDProps, VGDetail>{
-    constructor(props: VGDProps) {
+export default class MyBookDetails extends Component<MyBookDProps, MyBookDDetail>{
+    constructor(props: MyBookDProps) {
         super(props)
         this.state={
             modal: false
@@ -48,8 +45,7 @@ export default class VGDetails extends Component<VGDProps, VGDetail>{
                     <ModalBody>
                         <ol>
                             <li>{this.props.genre}</li>
-                            <li>{this.props.platform}</li>
-                            <li>{this.props.developer}</li>
+                            <li>{this.props.author}</li>
                             <li>{this.props.status}</li>
                             <li>{this.props.description}</li>
                         </ol>

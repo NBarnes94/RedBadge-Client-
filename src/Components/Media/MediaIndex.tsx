@@ -114,7 +114,7 @@ export class MediaDisplay extends Component<Props, User> {
         return (
             <div>
                 <div>
-                    <h1>Welcome {this.state.firstName}</h1>
+                    <h1>Welcome person! {this.state.firstName}</h1>
                 </div>
 
                 <MovieDisplay sessionToken={this.props.sessionToken} 

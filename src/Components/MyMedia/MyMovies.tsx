@@ -69,7 +69,7 @@ componentDidMount(){
     render() {
         return (
             <div>
-                <h1>My movies: </h1>
+                <h1>My movies : </h1>
                 {this.state.movie.map((movie, index) => {
                     return (
                         <div>

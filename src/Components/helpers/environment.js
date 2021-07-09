@@ -1,4 +1,4 @@
-let APIUrl = "http://nab-media-server.herokuapp.com";
+let APIUrl = "https://nab-media-server.herokuapp.com";
 
 
     // switch(window.location.hostname){

@@ -4,6 +4,8 @@ import { MyBooks } from './MyBooks'
 import { MyMovies } from "./MyMovies"
 import APIUrl from '../helpers/environment'
 import VGCreate from './CreateVG'
+import BookCreate from './CreateBook'
+import MovieCreate from './CreateMovie'
 
 
 type PageProps = {
@@ -93,6 +95,8 @@ export class MyPage extends Component<PageProps, mediaData>{
         return (
             <div>
                 <VGCreate sessionToken={this.props.sessionToken} />
+                <MovieCreate sessionToken={this.props.sessionToken}/>
+                <BookCreate sessionToken={this.props.sessionToken}/>
                 <MyMovies sessionToken={this.props.sessionToken} />
                 <MyVG sessionToken={this.props.sessionToken} />
                 <MyBooks sessionToken={this.props.sessionToken} />

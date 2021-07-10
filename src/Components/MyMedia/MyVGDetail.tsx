@@ -1,10 +1,12 @@
 import React, {Component} from 'react'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import {Button} from "@material-ui/core"
+import APIUrl from '../helpers/environment'
 
 
 type MyVGDProps = {
     sessionToken: string | null,
+    id: number,
     title: string,
     genre: string,
     developer: string,
@@ -30,6 +32,16 @@ export default class MyVGDetails extends Component<MyVGDProps, MyVGDetail>{
         console.log("toggle hit");
         
     }
+    deleteVG() {
+        fetch(`${APIUrl}/videoGames/delete/${this.props.id}`,{
+            method: "DELETE",
+            headers: new Headers({
+                'Content-Type': "application/json",
+                "Authorization": `${localStorage.getItem('token')}`
+            })
+        })
+
+    }
 
     render() {
         return (
@@ -52,6 +64,7 @@ export default class MyVGDetails extends Component<MyVGDProps, MyVGDetail>{
                             <li>{this.props.description}</li>
                         </ol>
                     </ModalBody>
+                    <Button onClick={this.deleteVG}>Delete</Button>
                 </Modal> 
             </div>
         )

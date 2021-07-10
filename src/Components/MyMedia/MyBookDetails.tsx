@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import {Button} from "@material-ui/core"
-
+import APIUrl from '../helpers/environment'
 
 type MyBookDProps = {
     sessionToken: string | null,
+    id: number
     title: string,
     genre: string,
     author: string,
@@ -30,6 +31,17 @@ export default class MyBookDetails extends Component<MyBookDProps, MyBookDDetail
         
     }
 
+    deleteBook() {
+        fetch(`${APIUrl}/book/delete/${this.props.id}`,{
+            method: "DELETE",
+            headers: new Headers({
+                'Content-Type': "application/json",
+                "Authorization": `${localStorage.getItem('token')}`
+            })
+        })
+
+    }
+
     render() {
         return (
             <div>
@@ -50,6 +62,7 @@ export default class MyBookDetails extends Component<MyBookDProps, MyBookDDetail
                             <li>{this.props.description}</li>
                         </ol>
                     </ModalBody>
+                    <Button onClick={this.deleteBook}>Delete Book</Button>
                 </Modal> 
             </div>
         )

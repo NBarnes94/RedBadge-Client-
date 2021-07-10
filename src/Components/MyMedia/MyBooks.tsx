@@ -77,7 +77,7 @@ componentDidMount(){
                                     <h2>{book.title}</h2>
                                 </CardTitle>
                                 
-                            <MyBookDetails sessionToken={this.props.sessionToken} title={book.title} genre={book.genre} author={book.author} description={book.description} status={book.status} /> 
+                            <MyBookDetails sessionToken={this.props.sessionToken} title={book.title} genre={book.genre} author={book.author} description={book.description} status={book.status} id={book.id}/> 
                             </Card>
                         </div>
                     )

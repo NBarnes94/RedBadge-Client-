@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import {Button} from "@material-ui/core"
-
+import APIUrl from "../helpers/environment"
 
 type MyMovieDProps = {
     sessionToken: string | null,
+    id: number,
     title: string,
     genre: string,
     studio: string,
@@ -16,7 +17,7 @@ type MyMovieDetail={
     modal:boolean
 }
 
-export default class MyVGDetails extends Component<MyMovieDProps, MyMovieDetail>{
+export default class MyMovieDetails extends Component<MyMovieDProps, MyMovieDetail>{
     constructor(props: MyMovieDProps) {
         super(props)
         this.state={
@@ -29,6 +30,17 @@ export default class MyVGDetails extends Component<MyMovieDProps, MyMovieDetail>
         this.setState({modal: !this.state.modal})
         console.log("toggle hit");
         
+    }
+
+    deleteMovie() {
+        fetch(`${APIUrl}/movie/delete/${this.props.id}`,{
+            method: "DELETE",
+            headers: new Headers({
+                'Content-Type': "application/json",
+                "Authorization": `${localStorage.getItem('token')}`
+            })
+        })
+
     }
 
     render() {
@@ -52,6 +64,7 @@ export default class MyVGDetails extends Component<MyMovieDProps, MyMovieDetail>
                             <li>{this.props.description}</li>
                         </ol>
                     </ModalBody>
+                    <Button onClick={this.deleteMovie}> Delete Movie</Button>
                 </Modal> 
             </div>
         )

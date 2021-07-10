@@ -80,7 +80,7 @@ componentDidMount(){
                                     <h2>{movie.title}</h2>
                                 </CardTitle>
                                 
-                            <MyMovieDetails sessionToken={this.props.sessionToken} title={movie.title} genre={movie.genre} studio={movie.studio} runTime={movie.runTime} description={movie.description} status={movie.status} /> 
+                            <MyMovieDetails sessionToken={this.props.sessionToken} title={movie.title} genre={movie.genre} studio={movie.studio} runTime={movie.runTime} description={movie.description} status={movie.status} id={movie.id}/> 
                             </Card>
                         </div>
                     )

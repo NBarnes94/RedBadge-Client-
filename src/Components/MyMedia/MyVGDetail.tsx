@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import {Button} from "@material-ui/core"
 import APIUrl from '../helpers/environment'
+import VGEdit from './EditVG'
 
 
 type MyVGDProps = {
@@ -65,6 +66,7 @@ export default class MyVGDetails extends Component<MyVGDProps, MyVGDetail>{
                         </ol>
                     </ModalBody>
                     <Button onClick={this.deleteVG}>Delete</Button>
+                    <VGEdit sessionToken={this.props.sessionToken} title={this.props.title} genre={this.props.genre} developer={this.props.developer} platform={this.props.platform} status={this.props.status} description={this.props.description} id={this.props.id} />
                 </Modal> 
             </div>
         )

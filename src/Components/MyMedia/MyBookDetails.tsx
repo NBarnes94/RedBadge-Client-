@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import {Button} from "@material-ui/core"
 import APIUrl from '../helpers/environment'
+import BookEdit from './EditBook'
 
 type MyBookDProps = {
     sessionToken: string | null,
@@ -62,6 +63,7 @@ export default class MyBookDetails extends Component<MyBookDProps, MyBookDDetail
                             <li>{this.props.description}</li>
                         </ol>
                     </ModalBody>
+                    <BookEdit sessionToken={this.props.sessionToken} title={this.props.title} genre={this.props.genre}  author={this.props.author} status={this.props.status} description={this.props.description} id={this.props.id} />
                     <Button onClick={this.deleteBook}>Delete Book</Button>
                 </Modal> 
             </div>

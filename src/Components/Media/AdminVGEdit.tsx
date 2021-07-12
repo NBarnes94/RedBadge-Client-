@@ -77,7 +77,7 @@ export default class AdminVGEdit extends Component<VGEProps, VGEDetails>{
     render() {
         return (
             <div>
-                <Button onClick={this.toggle}>Edit this game</Button>
+                <Button onClick={this.toggle}>Edit this Game</Button>
                 <Form onSubmit={(e) => this.handleSubmit(e)}>
                     <Modal
                         isOpen={this.state.modal} fade={true} toggle={this.toggle}

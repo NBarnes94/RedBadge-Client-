@@ -13,7 +13,9 @@ import APIUrl from '../helpers/environment'
 
 
 export interface BookProps {
-    sessionToken: string | null
+    sessionToken: string | null,
+    role: string,
+    fetchBook: any
 }
 
 export interface BookInfo {
@@ -59,6 +61,8 @@ export default class BookDisplay extends Component<BookProps, BookData>{
             })
     }
 
+    
+
 componentDidMount(){
     this.fetchBook()
 }
@@ -72,10 +76,10 @@ componentDidMount(){
                     return (
                         <Card className="card" key={index}>
                             <CardTitle>
-                                    <img src="./assets/book.pgn" alt="bookIcon"/>
+                                    {/* <img src={"./assets/book.pgn"} alt="bookIcon"/> */}
                                     <h2>{book.title}</h2>
                                 </CardTitle>
-                                <BookDetails sessionToken={this.props.sessionToken} title={book.title} genre={book.genre} author={book.author} description={book.description} status={book.status} />
+                                <BookDetails sessionToken={this.props.sessionToken} title={book.title} genre={book.genre} author={book.author} description={book.description} status={book.status} role={this.props.role} id={book.id} fetchBook={this.props.fetchBook}/>
                             </Card>
                     )
                 })}

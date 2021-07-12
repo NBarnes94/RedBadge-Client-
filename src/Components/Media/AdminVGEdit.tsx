@@ -4,35 +4,38 @@ import { Modal, ModalBody, ModalHeader } from 'reactstrap'
 import APIUrl from "../helpers/environment"
 import { Form, Input, Label } from 'reactstrap'
 
-type BookEProps = {
+type VGEProps = {
     sessionToken: string | null,
     id: number | string,
     title: string,
     genre: string,
-    author: string,
+    developer: string,
+    platform: string,
     description: string,
-    status: string,
-    fetchBook: any
+    status: string
+    fetchVG: any
 }
 
-type BookEDetails = {
+type VGEDetails = {
     modal: boolean
     title: string,
     genre: string,
-    author: string,
+    developer: string,
+    platform: string,
     description: string,
     status: string,
 }
-export default class BookEdit extends Component<BookEProps, BookEDetails>{
-    constructor(props: BookEProps) {
+export default class AdminVGEdit extends Component<VGEProps, VGEDetails>{
+    constructor(props: VGEProps) {
         super(props)
         this.state = {
             modal: false,
             title: this.props.title,
             genre: this.props.genre,
-            author: this.props.author,
+            developer: this.props.developer,
+            platform: this.props.platform,
             description: this.props.description,
-            status: this.props.status
+            status: this.props.status,
         }
         this.toggle = this.toggle.bind(this)
     }
@@ -41,12 +44,13 @@ export default class BookEdit extends Component<BookEProps, BookEDetails>{
         e.preventDefault();
 
 
-        fetch(`${APIUrl}/book/${this.props.id}`, {
+        fetch(`${APIUrl}/videoGames/${this.props.id}`, {
             method: "PUT",
             body: JSON.stringify({
                 title: this.state.title,
                 genre: this.state.genre,
-                author: this.state.author,
+                developer: this.state.developer,
+                platform: this.state.platform,
                 description: this.state.description,
                 status: this.state.status,
             }),
@@ -55,12 +59,12 @@ export default class BookEdit extends Component<BookEProps, BookEDetails>{
                 'Authorization': `${localStorage.getItem('token')}`
             })
         }).then((res) => res.json())
-            .then((bookToEdit) =>{
-                this.props.fetchBook()
-                console.log(bookToEdit)
+            .then((vgToEdit) => {
+                this.props.fetchVG()
                 this.toggle()
+                console.log(vgToEdit);
+
             })
-        
     }
 
 
@@ -73,7 +77,7 @@ export default class BookEdit extends Component<BookEProps, BookEDetails>{
     render() {
         return (
             <div>
-                <Button onClick={this.toggle}>Edit this Book</Button>
+                <Button onClick={this.toggle}>Edit this game</Button>
                 <Form onSubmit={(e) => this.handleSubmit(e)}>
                     <Modal
                         isOpen={this.state.modal} fade={true} toggle={this.toggle}
@@ -85,8 +89,10 @@ export default class BookEdit extends Component<BookEProps, BookEDetails>{
                         <ModalBody>
                             <Label>Genre: </Label>
                             <Input onChange={(e) => this.setState({ genre: e.target.value })} name="genre" value={this.state.genre} />
-                            <Label>Author: </Label>
-                            <Input onChange={(e) => this.setState({ author: e.target.value })} name="author" value={this.state.author} />
+                            <Label>developer: </Label>
+                            <Input onChange={(e) => this.setState({ developer: e.target.value })} name="developer" value={this.state.developer} />
+                            <Label>platform: </Label>
+                            <Input onChange={(e) => this.setState({ platform: e.target.value })} name="platform" value={this.state.platform} />
                             <Label>Description: </Label>
                             <Input onChange={(e) => this.setState({ description: e.target.value })} name="description" value={this.state.description} />
                             {/* <Label>Status</Label> */}

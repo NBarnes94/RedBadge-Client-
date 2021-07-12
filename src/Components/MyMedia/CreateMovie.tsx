@@ -6,6 +6,7 @@ import {Form, Input, Label} from 'reactstrap'
 
 type MovieCProps = {
     sessionToken: string | null,
+    createMovieFetch: any
 }
 
 type MovieCDetails = {
@@ -35,7 +36,7 @@ export default class MovieCreate extends Component<MovieCProps, MovieCDetails>{
     handleSubmit = (e: any) =>{
         e.preventDefault();
 
-        fetch(`${APIUrl}/videoGames/create`, {
+        fetch(`${APIUrl}/movie/create`, {
             method: "POST",
             body: JSON.stringify({
                 title: this.state.title,
@@ -51,10 +52,12 @@ export default class MovieCreate extends Component<MovieCProps, MovieCDetails>{
             })
         })
         .then((res) => res.json()
-        ).then((videogames1) => {
-            console.log(videogames1);
-            
+        ).then((movies1) => {
+            console.log(movies1);
+            console.log(`ive been hit`);
+            this.props.createMovieFetch()
         })
+        this.toggle()
     }
 
     toggle() {
@@ -90,7 +93,7 @@ export default class MovieCreate extends Component<MovieCProps, MovieCDetails>{
                             <MenuItem></MenuItem>
                         </Select> */}
                     </ModalBody>
-                <Button type="submit" onClick={this.toggle}>Submit</Button>
+                <Button type="submit" onClick={this.handleSubmit}>Submit</Button>
                 </Modal>
                 </Form>
             </div>

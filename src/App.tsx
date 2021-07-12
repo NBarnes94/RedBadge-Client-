@@ -11,7 +11,7 @@ import { faWindowRestore } from '@fortawesome/free-solid-svg-icons';
 import  BigNavbar from './Components/Navbar/Navbar';
 
 type CurrentSession = {
-  sessionToken: string | null
+  sessionToken: string | null 
 }
 
 export class App extends Component<{}, CurrentSession> {
@@ -20,7 +20,7 @@ export class App extends Component<{}, CurrentSession> {
     this.updateToken = this.updateToken.bind(this);
     this.clearToken = this.clearToken.bind(this);
     this.getToken = this.getToken.bind(this);
-    this.state = { sessionToken: '' };
+    this.state = { sessionToken: null };
   }
 
 
@@ -52,12 +52,13 @@ export class App extends Component<{}, CurrentSession> {
   }
 
   protectedViews() {
-    return (this.state.sessionToken === "" || undefined ? <Auth updateToken={this.updateToken}/>  : <MediaDisplay sessionToken={this.state.sessionToken} />)
+    const authorized = this.state.sessionToken
+
+    return (authorized ? <MediaDisplay getToken={this.getToken} sessionToken={this.state.sessionToken}/>  : <Auth updateToken={this.updateToken}/> )
   }
 
   render() {
 
-    const sessionToken: string | null = localStorage.getItem('token');
     return (
       <div className="App">
         <Router>

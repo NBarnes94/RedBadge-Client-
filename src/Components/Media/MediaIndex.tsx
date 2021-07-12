@@ -7,34 +7,48 @@ import MovieDisplay from './ShowMovie'
 import {VGDisplay} from './ShowVG'
 import BookDisplay from './ShowBook';
 import { render } from '@testing-library/react';
-import { getTokenSourceMapRange } from 'typescript';
+import { EnumType, getTokenSourceMapRange, JSDocEnumTag } from 'typescript';
 import userEvent from '@testing-library/user-event';
 import APIUrl from '../helpers/environment';
 import VGDetails from './DetailVG';
 // main view functionality
 
 export interface Props {
-    sessionToken: string | null
+    sessionToken: string | null,
+    getToken: () => any
 }
 
+enum UserType {
+    user = "user", 
+    admin = "admin"}
+
+// type UserInfo = {
+//     firstName: string,
+//     role: UserType
+// }
+
 type User = {
-    firstName: string
+    // user: UserInfo
+    firstName: string,
+    role: string,
     videogames: [],
     movies: [],
     books:[],
     modal: boolean
 }
 
-export class MediaDisplay extends Component<Props, User> {
+export default class MediaDisplay extends Component<Props, User> {
     constructor(props: Props) {
         super(props)
         this.state = {
             firstName: "",
+            role: "",
             videogames: [],
             movies: [],
             books: [],
             modal: false
         }
+        this.fetchUser = this.fetchUser.bind(this)
     }
 
     fetchMovie = async () => {
@@ -81,22 +95,27 @@ export class MediaDisplay extends Component<Props, User> {
     
     fetchUser = async () => {
         console.log("Function working");
-        console.log(localStorage.getItem('token'));
+        // console.log(localStorage.getItem('token'));
         
         fetch(`${APIUrl}/user/get`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `${localStorage.getItem('token')}`
+                "Authorization":  this.props.getToken()
             }
         })
-            .then((res)=> res.json)
+            .then((res)=> res.json())
             .then((user) => {
-                console.log(user);
-                // this.setState({  firstName: user })
+                console.log(user);                
                 console.log(this.state.firstName);
+                this.setState({firstName: user.getUser.firstName})
+                console.log(user.getUser.role);
                 
-                
+                if(user.getUser.role === "admin"){
+                this.setState({role: "admin"})
+                } else {
+                    this.setState({role: "user"})
+                }
             })
     }
 
@@ -105,30 +124,35 @@ export class MediaDisplay extends Component<Props, User> {
         this.fetchVG()
         this.fetchBook()
         this.fetchUser()
-        console.log(this.props.sessionToken);
+        
+        // console.log(this.props.sessionToken);
 
     }
 
 
     render() {
+        console.log(this.state.role);
+        console.log(this.state.firstName);
         return (
             <div>
-                <div>
-                    <h1>Welcome person! {this.state.firstName}</h1>
-                </div>
-
-                <MovieDisplay sessionToken={this.props.sessionToken} 
-                // modalOn={this.modalOn}
-                />
-
-                <VGDisplay sessionToken={this.props.sessionToken} 
-                // VGModal={this.VGModal}
-                />
-
-                <BookDisplay sessionToken={this.props.sessionToken} />
+                
+                        <div>
+                            <h1>Welcome {this.state.firstName}! </h1>
+                        </div>
+        
+                        <MovieDisplay sessionToken={this.props.sessionToken} 
+                        role={this.state.role}
+                        
+                        // modalOn={this.modalOn}
+                        />
+        
+                        <VGDisplay sessionToken={this.props.sessionToken} 
+                        role={this.state.role}
+                        
+                        />
+        
+                        <BookDisplay sessionToken={this.props.sessionToken} role={this.state.role} fetchBook={this.fetchBook}/>
             </div>
         )
     }
 }
-
-export default MediaDisplay;

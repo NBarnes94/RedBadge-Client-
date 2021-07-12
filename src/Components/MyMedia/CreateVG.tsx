@@ -6,6 +6,7 @@ import {Form, Input, Label} from 'reactstrap'
 
 type VGCProps = {
     sessionToken: string | null,
+    createVGFetch: any
 }
 
 type VGCDetails = {
@@ -53,8 +54,9 @@ export default class VGCreate extends Component<VGCProps, VGCDetails>{
         .then((res) => res.json()
         ).then((videogames1) => {
             console.log(videogames1);
-            
+            this.props.createVGFetch()
         })
+        this.toggle()
     }
 
     toggle() {
@@ -90,7 +92,7 @@ export default class VGCreate extends Component<VGCProps, VGCDetails>{
                             <MenuItem></MenuItem>
                         </Select> */}
                     </ModalBody>
-                <Button type="submit" onClick={this.toggle}>Submit</Button>
+                <Button type="submit" onClick={this.handleSubmit}>Submit</Button>
                 </Modal>
                 </Form>
             </div>

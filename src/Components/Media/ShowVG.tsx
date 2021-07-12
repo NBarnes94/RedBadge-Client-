@@ -16,6 +16,7 @@ import APIUrl from '../helpers/environment'
 
 export interface VGProps {
     sessionToken: string | null,
+    role: string
     // VGModal: []
 }
 
@@ -74,11 +75,11 @@ componentDidMount(){
                         <div>
                             <Card className="card" key={index}>
                                 <CardTitle>
-                                    <img src="./assets/videogame.png" alt="videoGameIcon"/>
+                                    {/* <img src="./assets/videogame.png" alt="videoGameIcon"/> */}
                                     <h2>{videogame.title}</h2>
                                 </CardTitle>
                                 
-                            <VGDetails sessionToken={this.props.sessionToken} title={videogame.title} genre={videogame.genre} developer={videogame.developer} platform={videogame.platform} description={videogame.description} status={videogame.status} /> 
+                            <VGDetails sessionToken={this.props.sessionToken} title={videogame.title} genre={videogame.genre} developer={videogame.developer} platform={videogame.platform} description={videogame.description} status={videogame.status} role={this.props.role} fetchVG={this.fetchVG} id={videogame.id}/> 
                             </Card>
                         </div>
                     )

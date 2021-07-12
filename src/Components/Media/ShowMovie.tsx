@@ -10,7 +10,8 @@ import APIUrl from '../helpers/environment'
 
 export interface MovieProps {
     // modalOn: boolean,
-    sessionToken: string | null
+    sessionToken: string | null,
+    role: string
 }
 
 export interface MovieInfo {
@@ -77,10 +78,10 @@ export default class MovieDisplay extends Component<MovieProps, MovieData>{
                         <Card className="card">
                             <CardTitle key={index}>
                                 {/* <FontAwesomeIcon icon="video" size="2x" /> */}
-                                <img src="./assets/movie.png" alt="movieIcon" />
+                                {/* <img src="./assets/movie.png" alt="movieIcon" /> */}
                                 <h2 >{movie.title}</h2>
                             </CardTitle>
-                            <MovieDetails sessionToken={this.props.sessionToken} title={movie.title} genre={movie.genre} studio={movie.studio} runTime={movie.runTime} description={movie.description} status={movie.status}
+                            <MovieDetails sessionToken={this.props.sessionToken} title={movie.title} genre={movie.genre} studio={movie.studio} runTime={movie.runTime} description={movie.description} status={movie.status} id={movie.id} fetchMovie={this.fetchMovie} role={this.props.role}
                                     // modalOn={this.props.modalOn}
                                     // toggle={this.state.toggle} 
                                     />

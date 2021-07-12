@@ -71,32 +71,54 @@ export class MyPage extends Component<PageProps, mediaData>{
         }
     }
 
+    
     createMovieFetch(){
-        fetch(`${APIUrl}/movie/create`,{
-            method:"POST", 
-            body: JSON.stringify({
-                title: "",
-                genre: "",
-                studio: "",
-                runTime: "",
-                description: "",
-                status: "",
+        fetch(`${APIUrl}/movie/`,{
+            method: "GET",
+            headers: new Headers({
+                "Content-Type": 'application/json'
             })
         })
+            .then((res) => res.json())
+            .then((movies) => {
+                console.log(movies);
+            })
     }
     createVGFetch(){
-        fetch(`${APIUrl}/videoGames/create`,)
+        fetch(`${APIUrl}/videoGames/`, {
+            method: "GET",
+            headers: new Headers({
+                "Content-Type": 'application/json',
+                "Authorization": `${localStorage.getItem('token')}`
+            })
+        })
+            .then((res) => res.json())
+            .then((videogames) => {
+                console.log(videogames);
+            })
     }
     createBookFetch(){
-        fetch(`${APIUrl}/book/create`,)
+        fetch(`${APIUrl}/book/`, {
+            method: "GET",
+            headers: new Headers({
+                "Content-Type": 'application/json', 
+                "Authorization": `${localStorage.getItem('token')}`
+            })
+        })
+            .then((res) => res.json())
+            .then((book) => {
+                console.log(book);
+            })
     }
+    
+    
 
     render() {
         return (
             <div>
-                <VGCreate sessionToken={this.props.sessionToken} />
-                <MovieCreate sessionToken={this.props.sessionToken}/>
-                <BookCreate sessionToken={this.props.sessionToken}/>
+                <VGCreate sessionToken={this.props.sessionToken} createVGFetch={this.createVGFetch}/>
+                <MovieCreate sessionToken={this.props.sessionToken} createMovieFetch={this.createMovieFetch}/>
+                <BookCreate sessionToken={this.props.sessionToken} createBookFetch={this.createBookFetch} />
                 <MyMovies sessionToken={this.props.sessionToken} />
                 <MyVG sessionToken={this.props.sessionToken} />
                 <MyBooks sessionToken={this.props.sessionToken} />

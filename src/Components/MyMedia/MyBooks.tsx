@@ -43,7 +43,7 @@ export class MyBooks extends Component<BookDProps, BookDData>{
         }]
         }
     }
-    fetchVG = async () => {
+    fetchBook = async () => {
     fetch(`${APIUrl}/book/`, {
         method: "GET",
         headers: new Headers({
@@ -59,25 +59,23 @@ export class MyBooks extends Component<BookDProps, BookDData>{
 }
 
 componentDidMount(){
-    this.fetchVG();
-    console.log(localStorage.getItem('token'));
-    
+    this.fetchBook();
 }
 
     render() {
         return (
             <div>
-                <h1>My VideoGames: </h1>
+                <h1>My Books: </h1>
                 {this.state.book.map((book, index) => {
                     return (
                         <div>
                             <Card className="card">
                                 <CardTitle>
-                                    <h4 key={index}>0</h4>
+                                    <h4 key={index}></h4>
                                     <h2>{book.title}</h2>
                                 </CardTitle>
                                 
-                            <MyBookDetails sessionToken={this.props.sessionToken} title={book.title} genre={book.genre} author={book.author} description={book.description} status={book.status} id={book.id}/> 
+                            <MyBookDetails sessionToken={this.props.sessionToken} title={book.title} genre={book.genre} author={book.author} description={book.description} status={book.status} id={book.id} fetchBook={this.fetchBook}/> 
                             </Card>
                         </div>
                     )

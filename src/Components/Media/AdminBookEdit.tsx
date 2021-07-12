@@ -23,7 +23,7 @@ type BookEDetails = {
     description: string,
     status: string,
 }
-export default class BookEdit extends Component<BookEProps, BookEDetails>{
+export default class AdminBookEdit extends Component<BookEProps, BookEDetails>{
     constructor(props: BookEProps) {
         super(props)
         this.state = {

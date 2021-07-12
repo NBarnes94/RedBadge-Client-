@@ -2,16 +2,22 @@ import React, { Component } from 'react'
 import { VGProps } from './ShowVG'
 import { BookInfo } from './ShowBook'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import {Button} from '@material-ui/core'
+import {Button} from '@material-ui/core';
+import APIUrl from '../helpers/environment'
+import BookEdit from './AdminBookEdit'
 
 
 type BookDProps = {
     sessionToken: string | null,
+    id: number,
     title: string,
     genre: string,
     author: string,
     description: string,
     status: string,
+    role: string,
+    fetchBook: any
+
 }
 type BookDetail= {
     modal: boolean
@@ -24,6 +30,21 @@ export default class BookDetails extends Component<BookDProps, BookDetail>{
             modal:false
         }
         this.toggle = this.toggle.bind(this)
+    }
+    deleteBook(id: number) {
+        fetch(`${APIUrl}/book/delete/${id}`,{
+            method: "DELETE",
+            headers: new Headers({
+                'Content-Type': "application/json",
+                "Authorization": `${localStorage.getItem('token')}`
+            })
+        })
+        .then((bookToDelete) =>{
+            this.props.fetchBook()
+            this.toggle()
+            console.log(bookToDelete);
+            
+        })
     }
     toggle() {
         this.setState({modal: !this.state.modal})
@@ -48,6 +69,7 @@ export default class BookDetails extends Component<BookDProps, BookDetail>{
                             <li>{this.props.description}</li>
                         </ol>
                     </ModalBody>
+                    {this.props.role == "admin" ? <div> <BookEdit sessionToken={this.props.sessionToken} title={this.props.title} genre={this.props.genre}  author={this.props.author} status={this.props.status} description={this.props.description} id={this.props.id} fetchBook={this.props.fetchBook} /> <Button onClick={() => {this.deleteBook(this.props.id)}}>Delete Book</Button> </div> : null}
                 </Modal>
             </div>
         )

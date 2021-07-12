@@ -45,7 +45,7 @@ export class MyMovies extends Component<VGProps, VGData>{
         }]
         }
     }
-    fetchVG = async () => {
+    fetchMovie = async () => {
     fetch(`${APIUrl}/movie/`, {
         method: "GET",
         headers: new Headers({
@@ -60,9 +60,10 @@ export class MyMovies extends Component<VGProps, VGData>{
         })
 }
 
+
+
 componentDidMount(){
-    this.fetchVG();
-    console.log(localStorage.getItem('token'));
+    this.fetchMovie();
     
 }
 
@@ -75,12 +76,12 @@ componentDidMount(){
                         <div>
                             <Card className="card">
                                 <CardTitle>
-                                    <h4 key={index}>0</h4>
+                                    <h4 key={index}></h4>
                                     <img src="" alt="" />
                                     <h2>{movie.title}</h2>
                                 </CardTitle>
                                 
-                            <MyMovieDetails sessionToken={this.props.sessionToken} title={movie.title} genre={movie.genre} studio={movie.studio} runTime={movie.runTime} description={movie.description} status={movie.status} id={movie.id}/> 
+                            <MyMovieDetails sessionToken={this.props.sessionToken} title={movie.title} genre={movie.genre} studio={movie.studio} runTime={movie.runTime} description={movie.description} status={movie.status} id={movie.id} fetchMovie={this.fetchMovie} /> 
                             </Card>
                         </div>
                     )

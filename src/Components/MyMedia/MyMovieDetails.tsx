@@ -13,6 +13,7 @@ type MyMovieDProps = {
     runTime: string,
     description: string,
     status: string,
+    fetchMovie: any,
 }
 type MyMovieDetail = {
     modal: boolean,
@@ -28,6 +29,8 @@ export default class MyMovieDetails extends Component<MyMovieDProps, MyMovieDeta
         }
         this.toggle = this.toggle.bind(this)
     }
+    
+    
 
     toggle() {
         this.setState({ modal: !this.state.modal })
@@ -35,18 +38,21 @@ export default class MyMovieDetails extends Component<MyMovieDProps, MyMovieDeta
 
     }
 
-    deleteMovie() {
-        fetch(`${APIUrl}/movie/delete/${this.props.id}`, {
+    deleteMovie(id: number) {
+        fetch(`${APIUrl}/movie/delete/${id}`, {
             method: "DELETE",
             headers: new Headers({
                 'Content-Type': "application/json",
                 "Authorization": `${localStorage.getItem('token')}`
             })
         })
+            this.props.fetchMovie()
+        
     }
-
     
-
+    componentDidMount(){
+        console.log(this.props.id);
+    }
     render() {
         return (
             <div>
@@ -66,10 +72,11 @@ export default class MyMovieDetails extends Component<MyMovieDProps, MyMovieDeta
                             <li>{this.props.runTime}</li>
                             <li>{this.props.status}</li>
                             <li>{this.props.description}</li>
+                            <li>{this.props.id}</li>
                         </ol>
                     </ModalBody>
-                    <MovieEdit sessionToken={this.props.sessionToken} title={this.props.title} genre={this.props.genre} studio={this.props.studio} runTime={this.props.runTime} status={this.props.status} description={this.props.description} id={this.props.id} />
-                    <Button onClick={this.deleteMovie}> Delete Movie</Button>
+                    <MovieEdit sessionToken={this.props.sessionToken} title={this.props.title} genre={this.props.genre} studio={this.props.studio} runTime={this.props.runTime} status={this.props.status} description={this.props.description} id={this.props.id} fetchMovie={this.props.fetchMovie} />
+                    <Button onClick={()=>{this.deleteMovie(this.props.id)}}> Delete Movie</Button>
                 </Modal>
             </div>
         )

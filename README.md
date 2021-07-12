@@ -7,3 +7,4 @@ https://reactjs.org/docs/faq-functions.html#how-do-i-bind-a-function-to-a-compon
 https://reactstrap.github.io/components/modals/
 https://material-ui.com/getting-started/installation/
 https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS/Errors/CORSMissingAllowOrigin
+https://www.robinwieruch.de/local-storage-react

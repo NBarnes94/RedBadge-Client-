@@ -6,6 +6,7 @@ import {Form, Input, Label} from 'reactstrap'
 
 type BookCProps = {
     sessionToken: string | null,
+    createBookFetch: any
 }
 
 type BookCDetails = {
@@ -33,7 +34,7 @@ export default class BookCreate extends Component<BookCProps, BookCDetails>{
     handleSubmit = (e: any) =>{
         e.preventDefault();
 
-        fetch(`${APIUrl}/videoGames/create`, {
+        fetch(`${APIUrl}/book/create`, {
             method: "POST",
             body: JSON.stringify({
                 title: this.state.title,
@@ -48,9 +49,10 @@ export default class BookCreate extends Component<BookCProps, BookCDetails>{
             })
         })
         .then((res) => res.json()
-        ).then((videogames1) => {
-            console.log(videogames1);
-            
+        ).then((books1) => {
+            console.log(books1);
+            this.toggle()
+            this.props.createBookFetch()
         })
     }
 
@@ -63,8 +65,8 @@ export default class BookCreate extends Component<BookCProps, BookCDetails>{
     render() {
         return (
             <div>
-                <Button onClick={this.toggle}>Add a Movie</Button>
-                <Form onSubmit={(e) => this.handleSubmit(e)}>
+                <Button onClick={this.toggle}>Add a Book</Button>
+                <Form onSubmit={this.toggle}>
                 <Modal
                     isOpen={this.state.modal} fade={true} toggle={this.toggle}
                 >
@@ -85,7 +87,7 @@ export default class BookCreate extends Component<BookCProps, BookCDetails>{
                             <MenuItem></MenuItem>
                         </Select> */}
                     </ModalBody>
-                <Button type="submit" onClick={this.toggle}>Submit</Button>
+                <Button type="submit" onClick={this.handleSubmit}>Submit</Button>
                 </Modal>
                 </Form>
             </div>

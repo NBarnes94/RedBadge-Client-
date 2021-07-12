@@ -63,9 +63,7 @@ export class MyVG extends Component<VGProps, VGData>{
     
 
     componentDidMount() {
-        this.fetchVG();
-        console.log(localStorage.getItem('token'));
-
+        this.fetchVG()
     }
 
     render() {
@@ -77,11 +75,11 @@ export class MyVG extends Component<VGProps, VGData>{
                         <div>
                             <Card className="card">
                                 <CardTitle>
-                                    <h4 key={index}>0</h4>
+                                    <h4 key={index}></h4>
                                     <h2>{videogame.title}</h2>
                                 </CardTitle>
 
-                                <MyVGDetails sessionToken={this.props.sessionToken} title={videogame.title} genre={videogame.genre} developer={videogame.developer} platform={videogame.platform} description={videogame.description} status={videogame.status} id={videogame.id}/>
+                                <MyVGDetails sessionToken={this.props.sessionToken} title={videogame.title} genre={videogame.genre} developer={videogame.developer} platform={videogame.platform} description={videogame.description} status={videogame.status} id={videogame.id} fetchVG={this.fetchVG}/>
                             </Card>
                         </div>
                     )

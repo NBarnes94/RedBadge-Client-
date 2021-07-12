@@ -14,6 +14,7 @@ type MyVGDProps = {
     platform: string,
     description: string,
     status: string,
+    fetchVG: any
 }
 type MyVGDetail={
     modal:boolean
@@ -33,15 +34,15 @@ export default class MyVGDetails extends Component<MyVGDProps, MyVGDetail>{
         console.log("toggle hit");
         
     }
-    deleteVG() {
-        fetch(`${APIUrl}/videoGames/delete/${this.props.id}`,{
+    deleteVG(id: number) {
+        fetch(`${APIUrl}/videoGames/delete/${id}`,{
             method: "DELETE",
             headers: new Headers({
                 'Content-Type': "application/json",
                 "Authorization": `${localStorage.getItem('token')}`
             })
         })
-
+        this.props.fetchVG()
     }
 
     render() {
@@ -65,8 +66,8 @@ export default class MyVGDetails extends Component<MyVGDProps, MyVGDetail>{
                             <li>{this.props.description}</li>
                         </ol>
                     </ModalBody>
-                    <Button onClick={this.deleteVG}>Delete</Button>
-                    <VGEdit sessionToken={this.props.sessionToken} title={this.props.title} genre={this.props.genre} developer={this.props.developer} platform={this.props.platform} status={this.props.status} description={this.props.description} id={this.props.id} />
+                    <Button onClick={()=> {this.deleteVG(this.props.id)}}>Delete</Button>
+                    <VGEdit sessionToken={this.props.sessionToken} title={this.props.title} genre={this.props.genre} developer={this.props.developer} platform={this.props.platform} status={this.props.status} description={this.props.description} id={this.props.id} fetchVG={this.props.fetchVG}/>
                 </Modal> 
             </div>
         )

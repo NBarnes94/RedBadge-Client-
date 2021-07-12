@@ -6,12 +6,13 @@ import BookEdit from './EditBook'
 
 type MyBookDProps = {
     sessionToken: string | null,
-    id: number
+    id: number,
     title: string,
     genre: string,
     author: string,
     description: string,
     status: string,
+    fetchBook: any
 }
 type MyBookDDetail={
     modal:boolean
@@ -32,15 +33,20 @@ export default class MyBookDetails extends Component<MyBookDProps, MyBookDDetail
         
     }
 
-    deleteBook() {
-        fetch(`${APIUrl}/book/delete/${this.props.id}`,{
+    deleteBook(id: number) {
+        fetch(`${APIUrl}/book/delete/${id}`,{
             method: "DELETE",
             headers: new Headers({
                 'Content-Type': "application/json",
                 "Authorization": `${localStorage.getItem('token')}`
             })
         })
-
+        .then((bookToDelete) =>{
+            this.props.fetchBook()
+            this.toggle()
+            console.log(bookToDelete);
+            
+        })
     }
 
     render() {
@@ -63,8 +69,8 @@ export default class MyBookDetails extends Component<MyBookDProps, MyBookDDetail
                             <li>{this.props.description}</li>
                         </ol>
                     </ModalBody>
-                    <BookEdit sessionToken={this.props.sessionToken} title={this.props.title} genre={this.props.genre}  author={this.props.author} status={this.props.status} description={this.props.description} id={this.props.id} />
-                    <Button onClick={this.deleteBook}>Delete Book</Button>
+                    <BookEdit sessionToken={this.props.sessionToken} title={this.props.title} genre={this.props.genre}  author={this.props.author} status={this.props.status} description={this.props.description} id={this.props.id} fetchBook={this.props.fetchBook} />
+                    <Button onClick={() => {this.deleteBook(this.props.id )}}>Delete Book</Button>
                 </Modal> 
             </div>
         )

@@ -77,6 +77,7 @@ class MovieCreate extends Component<MovieCProps, MovieCDetails>{
             console.log(movies1);
             console.log(`ive been hit`);
             this.props.createMovieFetch()
+            this.handleClose()
         })
         this.toggle()
     }

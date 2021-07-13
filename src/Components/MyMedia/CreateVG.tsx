@@ -79,6 +79,7 @@ class VGCreate extends Component<VGCProps, VGCDetails>{
         ).then((videogames1) => {
             console.log(videogames1);
             this.props.createVGFetch()
+            this.handleClose()
         })
         this.toggle()
     }

@@ -1,0 +1,37 @@
+.auth{
+    /* display: flex; */
+    /* justify-content: space-around; */
+    height: auto;
+    width: auto;
+}
+.authHeader{
+    margin-bottom: 100px;
+    justify-content: center;
+}
+.authBody{
+    margin: auto;
+    margin-bottom: 100px;
+}
+.authInfo{
+    margin-left: auto;
+    margin-right: auto;
+}
+.login{
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 100px;
+}
+.register{
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 42vh;
+}
+
+.inputBox{
+    display: inline-block;
+    height: 25px;
+    width: 200px;
+    justify-content: space-around;
+}

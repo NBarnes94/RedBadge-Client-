@@ -1,14 +1,16 @@
 import React, { useEffect, useState, Component } from 'react'
-import { makeStyles, CardActions, CardContent, Button, } from "@material-ui/core"
+import { makeStyles, CardActions, CardContent, Button, withStyles, Theme, WithStyles, Card, Typography  } from "@material-ui/core"
 import { Interface } from 'readline'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Card, CardTitle, CardText, Row, Col } from 'reactstrap'
+// import { Card, CardTitle, CardText, Row, Col } from 'reactstrap'
 import MovieDetails from './MovieDetails'
 import APIUrl from '../helpers/environment'
+import { faFilm } from '@fortawesome/free-solid-svg-icons'
+
 // import  {video} from'@fortawesome/fontawesome-svg-core'
 // will build out the 
 
-export interface MovieProps {
+export interface MovieProps extends WithStyles<typeof styles> {
     // modalOn: boolean,
     sessionToken: string | null,
     role: string
@@ -29,7 +31,34 @@ type MovieData = {
     toggle: boolean
 }
 
-export default class MovieDisplay extends Component<MovieProps, MovieData>{
+const styles = (theme: Theme) => ({
+    root: {
+        minWidth: 275,
+        marginLeft: 12, 
+        display: "flex",
+        justifyContent: "center",
+        backgroundColor: "#6678ad",
+    backgroundImage: 'url("https://www.transparenttextures.com/patterns/broken-noise.png")',
+    /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+    minHeight: 250,
+    marginBottom: 20
+    },
+    bullet: {
+        display: 'inline-block',
+        margin: '0 2px',
+        transform: 'scale(0.8)',
+    },
+    title: {
+        fontSize: 14,
+    },
+    pos: {
+        marginBottom: 12,
+        
+    },
+})
+
+
+class MovieDisplay extends Component<MovieProps, MovieData>{
     constructor(props: MovieProps) {
         super(props)
         this.state = {
@@ -45,7 +74,7 @@ export default class MovieDisplay extends Component<MovieProps, MovieData>{
             toggle: false
         }
     }
-
+    
     fetchMovie = async () => {
         fetch(`${APIUrl}/movie/all`, {
             method: "GET",
@@ -69,27 +98,34 @@ export default class MovieDisplay extends Component<MovieProps, MovieData>{
     }
 
     render() {
+        const { classes } = this.props;
         return (
-            <div>
+            <div >
                 <h1>Movies: </h1>
-                {this.state.movies.map((movie, index) => {
-                    return (
-
-                        <Card className="card">
-                            <CardTitle key={index}>
-                                {/* <FontAwesomeIcon icon="video" size="2x" /> */}
-                                {/* <img src="./assets/movie.png" alt="movieIcon" /> */}
-                                <h2 >{movie.title}</h2>
-                            </CardTitle>
-                            <MovieDetails sessionToken={this.props.sessionToken} title={movie.title} genre={movie.genre} studio={movie.studio} runTime={movie.runTime} description={movie.description} status={movie.status} id={movie.id} fetchMovie={this.fetchMovie} role={this.props.role}
-                                    // modalOn={this.props.modalOn}
-                                    // toggle={this.state.toggle} 
-                                    />
-                        </Card>
-                    )
-                })}
+                <div className="mediaCard">
+                    {this.state.movies.map((movie, index) => {
+                        return (
+                            <Card className={classes.root}>
+                                <CardContent>
+                                    <Typography variant="h5" component="h2" >
+                                        <h4 key={index}></h4>
+                                        <FontAwesomeIcon icon={faFilm} size="2x" />
+                                        <h2 >{movie.title}</h2>
+                                    </Typography>
+                                <CardActions> 
+                                <MovieDetails sessionToken={this.props.sessionToken} title={movie.title} genre={movie.genre} studio={movie.studio} runTime={movie.runTime} description={movie.description} status={movie.status} id={movie.id} fetchMovie={this.fetchMovie} role={this.props.role}
+                                // modalOn={this.props.modalOn}
+                                // toggle={this.state.toggle} 
+                                /> 
+                                </CardActions>
+                                </CardContent>
+                            </Card>
+                        )
+                    })}
+                </div>
             </div>
         )
     }
 }
 
+export default withStyles(styles, { withTheme: true })(MovieDisplay)

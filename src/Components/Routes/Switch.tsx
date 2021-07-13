@@ -6,10 +6,12 @@ import MediaIndex from '../Media/MediaIndex'
 import { Button } from '@material-ui/core';
 import {Navbar} from 'reactstrap'
 
+
 type RouterProps ={
     updateToken: (newToken: string ) => void;
     sessionToken: string | null ; 
-    clearSession: any
+    clearSession: any,
+    getToken: any
 }
 
 const RouteDom: React.FC<RouterProps> = (props) =>{
@@ -26,7 +28,7 @@ const RouteDom: React.FC<RouterProps> = (props) =>{
             <div className="navRoute">
                 <Switch>
                     <Route exact path="/home"><App /></Route>
-                    {/* <Route exact path="/allMedia"><MediaIndex sessionToken={props.sessionToken}/></Route> */}
+                    <Route exact path="/allMedia"><MediaIndex getToken={props.getToken} sessionToken={props.sessionToken}/></Route>
                     <Route exact path="/myPage"><MyPage sessionToken={props.sessionToken}/></Route>
                 </Switch>
             </div>

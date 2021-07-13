@@ -4,7 +4,7 @@ import { VGInfo } from './ShowVG';
 import { BookInfo } from './ShowBook';
 import { MovieInfo } from './ShowMovie'
 import MovieDisplay from './ShowMovie'
-import {VGDisplay} from './ShowVG'
+import VGDisplay from './ShowVG'
 import BookDisplay from './ShowBook';
 import { render } from '@testing-library/react';
 import { EnumType, getTokenSourceMapRange, JSDocEnumTag } from 'typescript';

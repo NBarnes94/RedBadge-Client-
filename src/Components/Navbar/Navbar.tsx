@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from '@material-ui/core'
 import { Navbar } from 'reactstrap'
-import {Link} from 'react-router-dom'
+import {Link, Route} from 'react-router-dom'
 import './Navbar.css'
 
 type NavProps = {
@@ -19,12 +19,12 @@ export default class BigNavbar extends Component<NavProps>{
         return (
             <div>
                 <Navbar className="nav">
-                    <ul>
+                    <ul className="links" >
                         <li><Link to="/">Home</Link></li>
                         <li><Link to="/allMedia">View All</Link></li>
                         <li><Link to="/myPage">My Stuff</Link></li>
                     </ul>
-                    <Button onClick={this.props.clearSession} className="logOut">Log Out</Button>
+                    <Button onClick={this.props.clearSession} className="logOut">Log Out</Button>                    
                 </Navbar>
             </div>
         )

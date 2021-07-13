@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
 import { Button, Select, MenuItem } from '@material-ui/core'
-import { Modal, ModalBody, ModalHeader } from 'reactstrap'
+// import { Modal, ModalBody, ModalHeader } from 'reactstrap'
 import APIUrl from "../helpers/environment"
 import { Form, Input, Label } from 'reactstrap'
+import { makeStyles, Theme, createStyles, withStyles, WithStyles } from '@material-ui/core/styles';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
 
-type VGEProps = {
+interface VGEProps extends WithStyles<typeof styles> {
     sessionToken: string | null,
     id: number | string,
     title: string,
@@ -13,7 +17,7 @@ type VGEProps = {
     platform: string,
     description: string,
     status: string
-    fetchVG: any
+    fetchVG: Function
 }
 
 type VGEDetails = {
@@ -24,8 +28,24 @@ type VGEDetails = {
     platform: string,
     description: string,
     status: string,
+    open: boolean
 }
-export default class AdminVGEdit extends Component<VGEProps, VGEDetails>{
+
+const styles = (theme: Theme) => ({
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    paper: {
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+    },
+})
+
+class AdminVGEdit extends Component<VGEProps, VGEDetails>{
     constructor(props: VGEProps) {
         super(props)
         this.state = {
@@ -36,6 +56,7 @@ export default class AdminVGEdit extends Component<VGEProps, VGEDetails>{
             platform: this.props.platform,
             description: this.props.description,
             status: this.props.status,
+            open: false
         }
         this.toggle = this.toggle.bind(this)
     }
@@ -63,7 +84,7 @@ export default class AdminVGEdit extends Component<VGEProps, VGEDetails>{
                 this.props.fetchVG()
                 this.toggle()
                 console.log(vgToEdit);
-
+                this.handleClose()
             })
     }
 
@@ -74,37 +95,56 @@ export default class AdminVGEdit extends Component<VGEProps, VGEDetails>{
 
     }
 
+    handleOpen = () => {
+        this.setState({ open: true });
+    };
+
+    handleClose = () => {
+        this.setState({ open: false });
+    };
+
     render() {
+        const { classes } = this.props;
+
         return (
             <div>
-                <Button onClick={this.toggle}>Edit this Game</Button>
-                <Form onSubmit={(e) => this.handleSubmit(e)}>
-                    <Modal
-                        isOpen={this.state.modal} fade={true} toggle={this.toggle}
-                    >
-                        <ModalHeader toggle={this.toggle}>
-                            <Label htmlFor="Title">Title:</Label>
-                            <Input onChange={(e) => this.setState({ title: e.target.value })} name="title" value={this.state.title} defaultValue={this.props.title} />
-                        </ModalHeader>
-                        <ModalBody>
-                            <Label>Genre: </Label>
-                            <Input onChange={(e) => this.setState({ genre: e.target.value })} name="genre" value={this.state.genre} />
-                            <Label>developer: </Label>
-                            <Input onChange={(e) => this.setState({ developer: e.target.value })} name="developer" value={this.state.developer} />
-                            <Label>platform: </Label>
-                            <Input onChange={(e) => this.setState({ platform: e.target.value })} name="platform" value={this.state.platform} />
-                            <Label>Description: </Label>
-                            <Input onChange={(e) => this.setState({ description: e.target.value })} name="description" value={this.state.description} />
+                <Button className={classes.modal} onClick={this.handleOpen}>Edit this game</Button>
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    className={classes.modal}
+                    open={this.state.open}
+                    onClose={this.handleClose}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}
+                >
+                    <Fade in={this.state.open}>
+                        <div className={classes.paper}>
+                            <Label className="modalLabel"  htmlFor="Title">Title:</Label>
+                            <Input autoComplete="off" onChange={(e) => this.setState({ title: e.target.value })} name="title" value={this.state.title} defaultValue={this.props.title} />
+                            <Label className="modalLabel" >Genre: </Label>
+                            <Input autoComplete="off" onChange={(e) => this.setState({ genre: e.target.value })} name="genre" value={this.state.genre} />
+                            <Label className="modalLabel" >developer: </Label>
+                            <Input autoComplete="off" onChange={(e) => this.setState({ developer: e.target.value })} name="developer" value={this.state.developer} />
+                            <Label className="modalLabel" >platform: </Label>
+                            <Input autoComplete="off" onChange={(e) => this.setState({ platform: e.target.value })} name="platform" value={this.state.platform} />
+                            <Label className="modalLabel" >Description: </Label>
+                            <Input autoComplete="off" onChange={(e) => this.setState({ description: e.target.value })} className='textInput' name="description" type="textarea" value={this.state.description} />
                             {/* <Label>Status</Label> */}
                             {/* <Select onChange={(e)=> this.setState({status: e.target.value})} name="status" value={this.state.status}>
                             <MenuItem value=""><em>None</em></MenuItem>
                             <MenuItem></MenuItem>
                         </Select> */}
-                        </ModalBody>
-                        <Button type="submit" onClick={this.handleSubmit}>Submit</Button>
-                    </Modal>
-                </Form>
-            </div>
-        )
+                            <Button type="submit" onClick={this.handleSubmit} className="modalButtons" >Submit</Button>
+                        </div>
+                    </Fade>
+                </Modal>
+            </div >
+        );
     }
 }
+
+export default withStyles(styles, { withTheme: true })(AdminVGEdit);

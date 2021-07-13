@@ -8,3 +8,4 @@ https://reactstrap.github.io/components/modals/
 https://material-ui.com/getting-started/installation/
 https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS/Errors/CORSMissingAllowOrigin
 https://www.robinwieruch.de/local-storage-react
+https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react

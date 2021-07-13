@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { Button, Select, MenuItem } from '@material-ui/core'
-import { Modal, ModalBody, ModalHeader } from 'reactstrap'
 import APIUrl from "../helpers/environment"
-import {Form, Input, Label} from 'reactstrap'
+import {Form, Input, Label, } from 'reactstrap'
+import { makeStyles, Theme, createStyles, withStyles, WithStyles } from '@material-ui/core/styles';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
 
-type MovieCProps = {
+interface MovieCProps extends WithStyles<typeof styles>{
     sessionToken: string | null,
-    createMovieFetch: any
+    createMovieFetch: Function
 }
 
 type MovieCDetails = {
@@ -17,8 +20,25 @@ type MovieCDetails = {
     runTime: string,
     description: string,
     status: string,
+    open: boolean
 }
-export default class MovieCreate extends Component<MovieCProps, MovieCDetails>{
+
+const styles = (theme: Theme) => ({
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    paper: {
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+    },
+})
+
+
+class MovieCreate extends Component<MovieCProps, MovieCDetails>{
     constructor(props: MovieCProps) {
         super(props)
         this.state = {
@@ -29,6 +49,7 @@ export default class MovieCreate extends Component<MovieCProps, MovieCDetails>{
             runTime: "",
             description: "",
             status: "",
+            open: false
         }
         this.toggle = this.toggle.bind(this)
     }
@@ -66,37 +87,57 @@ export default class MovieCreate extends Component<MovieCProps, MovieCDetails>{
 
     }
 
+    handleOpen = () => {
+        this.setState({ open: true });
+    };
+
+    handleClose = () => {
+        this.setState({ open: false });
+    };
+
+
     render() {
-        return (
-            <div>
-                <Button onClick={this.toggle}>Add a Movie</Button>
-                <Form onSubmit={(e) => this.handleSubmit(e)}>
+        const { classes } = this.props;
+        return(
+            <div className="createModal">
+                <Button className={classes.modal} onClick={this.handleOpen}>Add a Movie</Button>
                 <Modal
-                    isOpen={this.state.modal} fade={true} toggle={this.toggle}
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    className={classes.modal}
+                    open={this.state.open}
+                    onClose={this.handleClose}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}
                 >
-                    <ModalHeader toggle={this.toggle}>
-                        <Label htmlFor="Title">Title:</Label>
-                        <Input onChange={(e) => this.setState({title: e.target.value})} name="title" value={this.state.title} />
-                    </ModalHeader>
-                    <ModalBody>
-                        <Label>Genre: </Label>
-                        <Input onChange={(e)=> this.setState({genre: e.target.value})} name="genre" value={this.state.genre} />
-                        <Label>studio: </Label>
-                        <Input onChange={(e)=> this.setState({studio: e.target.value})} name="studio" value={this.state.studio} />
-                        <Label>runTime: </Label>
-                        <Input onChange={(e)=> this.setState({runTime: e.target.value})} name="runTime" value={this.state.runTime} />
-                        <Label>Description: </Label>
-                        <Input onChange={(e)=> this.setState({description: e.target.value})} name="description" value={this.state.description} />
-                        {/* <Label>Status</Label> */}
-                        {/* <Select onChange={(e)=> this.setState({status: e.target.value})} name="status" value={this.state.status}>
+                    <Fade in={this.state.open}>
+                        <div className={classes.paper}>
+                            <h2>Add a Movie</h2>
+                            <Label className="modalLabel"  htmlFor="Title">Title:</Label>
+                            <Input autoComplete="off" onChange={(e) => this.setState({ title: e.target.value })} name="title" value={this.state.title} defaultValue={this.state.title} />
+                            <Label className="modalLabel" >Genre: </Label>
+                            <Input autoComplete="off" onChange={(e) => this.setState({ genre: e.target.value })} name="genre" value={this.state.genre} />
+                            <Label className="modalLabel" >Studio: </Label>
+                            <Input autoComplete="off" onChange={(e) => this.setState({ studio: e.target.value })} name="studio" value={this.state.studio} />
+                            <Label className="modalLabel" >Run Time: </Label>
+                            <Input autoComplete="off" onChange={(e) => this.setState({ runTime: e.target.value })} name="runTime" value={this.state.runTime} />
+                            <Label className="modalLabel" >Description: </Label>
+                            <Input autoComplete="off" onChange={(e) => this.setState({ description: e.target.value })} className='textInput' name="description" type="textarea" value={this.state.description} />
+                            {/* <Label>Status</Label> */}
+                            {/* <Select onChange={(e)=> this.setState({status: e.target.value})} name="status" value={this.state.status}>
                             <MenuItem value=""><em>None</em></MenuItem>
                             <MenuItem></MenuItem>
                         </Select> */}
-                    </ModalBody>
-                <Button type="submit" onClick={this.handleSubmit}>Submit</Button>
+                            <Button type="submit" onClick={this.handleSubmit} className="modalButtons" >Submit</Button>
+                        </div>
+                    </Fade>
                 </Modal>
-                </Form>
-            </div>
-        )
+            </div >
+        );
     }
 }
+
+export default withStyles(styles, { withTheme: true })(MovieCreate);

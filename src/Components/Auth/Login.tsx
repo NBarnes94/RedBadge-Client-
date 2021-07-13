@@ -47,12 +47,14 @@ export class Login extends Component<AcceptedProps, UserInfo>{
     render(){
         return(
             <div>
-                <Form onSubmit={(e) => this.handleSubmit(e)}>
+                <Form onSubmit={(e) => this.handleSubmit(e)} className="login">
                     <FormGroup>
                         <Label htmlFor="email">Email:</Label>
-                        <Input onChange={(e) => this.setState({email: e.target.value})} name="email" value={this.state.email}/>
+                        <Input onChange={(e) => this.setState({email: e.target.value})} name="email" value={this.state.email} className="inputBox"/>
+                    </FormGroup>
+                    <FormGroup>    
                         <Label htmlFor="password">Password:</Label>
-                        <Input onChange={(e) => this.setState({password: e.target.value})} name="password" type="password" value={this.state.password}/>
+                        <Input onChange={(e) => this.setState({password: e.target.value})} name="password" type="password" value={this.state.password} className="inputBox" />
                     </FormGroup>
                     <Button type="submit">Login</Button>
                 </Form>

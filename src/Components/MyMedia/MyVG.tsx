@@ -1,20 +1,20 @@
 
 import React, { useEffect, useState, Component } from 'react'
-import { makeStyles, Button } from "@material-ui/core"
+import { makeStyles, CardActions, CardContent, Button, withStyles, Theme, WithStyles, Card, Typography } from "@material-ui/core"
 import { Interface } from 'readline'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { type, UserInfo } from 'os'
-import { Card, CardTitle, CardText, Row, Col } from 'reactstrap'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import { render } from '@testing-library/react'
 import MyVGDetails from './MyVGDetail'
 import APIUrl from '../helpers/environment'
+import { faGamepad } from '@fortawesome/free-solid-svg-icons'
 
 
 // import  {video} from'@fortawesome/fontawesome-svg-core'
 // will build out the 
 
-export interface VGProps {
+export interface VGProps extends WithStyles<typeof styles> {
     sessionToken: string | null,
 }
 
@@ -31,7 +31,33 @@ type VGData = {
     videogames: VGInfo[]
 }
 
-export class MyVG extends Component<VGProps, VGData>{
+const styles = (theme: Theme) => ({
+    root: {
+        minWidth: 275,
+        marginLeft: 12,
+        display: "flex",
+        justifyContent: "center",
+        backgroundColor: "#6678ad",
+        backgroundImage: 'url("https://www.transparenttextures.com/patterns/broken-noise.png")',
+        /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+        minHeight: 400,
+        marginBottom: 20
+    },
+    bullet: {
+        display: 'inline-block',
+        margin: '0 2px',
+        transform: 'scale(0.8)',
+    },
+    title: {
+        fontSize: 14,
+    },
+    pos: {
+        marginBottom: 12,
+
+    },
+})
+
+class MyVG extends Component<VGProps, VGData>{
     constructor(props: VGProps) {
         super(props)
         this.state = {
@@ -60,31 +86,39 @@ export class MyVG extends Component<VGProps, VGData>{
                 this.setState({ videogames: videogames })
             })
     }
-    
+
 
     componentDidMount() {
         this.fetchVG()
     }
 
     render() {
+        const { classes } = this.props
         return (
             <div>
                 <h1>My VideoGames: </h1>
-                {this.state.videogames.map((videogame, index) => {
-                    return (
-                        <div>
-                            <Card className="card">
-                                <CardTitle>
-                                    <h4 key={index}></h4>
-                                    <h2>{videogame.title}</h2>
-                                </CardTitle>
-
-                                <MyVGDetails sessionToken={this.props.sessionToken} title={videogame.title} genre={videogame.genre} developer={videogame.developer} platform={videogame.platform} description={videogame.description} status={videogame.status} id={videogame.id} fetchVG={this.fetchVG}/>
-                            </Card>
-                        </div>
-                    )
-                })}
+                <div className="mediaCard">
+                    {this.state.videogames.map((videogame, index) => {
+                        return (
+                            <div>
+                                <Card className={classes.root} >
+                                    <CardContent>
+                                        <Typography variant="h5" component="h2">
+                                            <h4 key={index}></h4>
+                                            < FontAwesomeIcon icon={faGamepad} className="vgIcon" size="2x" />
+                                            <h2>{videogame.title}</h2></Typography>
+                                        <CardActions>
+                                            <MyVGDetails sessionToken={this.props.sessionToken} title={videogame.title} genre={videogame.genre} developer={videogame.developer} platform={videogame.platform} description={videogame.description} status={videogame.status} fetchVG={this.fetchVG} id={videogame.id} />
+                                        </CardActions>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        )
+                    })}
+                </div>
             </div>
         )
     }
 }
+
+export default withStyles(styles, { withTheme: true })(MyVG)

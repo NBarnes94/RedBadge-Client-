@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import { Button, Select, MenuItem } from '@material-ui/core'
-import { Modal, ModalBody, ModalHeader } from 'reactstrap'
 import APIUrl from "../helpers/environment"
 import { Form, Input, Label } from 'reactstrap'
+import { makeStyles, Theme, createStyles, withStyles, WithStyles } from '@material-ui/core/styles';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
 
-type BookEProps = {
+interface BookEProps extends WithStyles<typeof styles>  {
     sessionToken: string | null,
     id: number | string,
     title: string,
@@ -12,7 +15,7 @@ type BookEProps = {
     author: string,
     description: string,
     status: string,
-    fetchBook: any
+    fetchBook: Function
 }
 
 type BookEDetails = {
@@ -22,8 +25,25 @@ type BookEDetails = {
     author: string,
     description: string,
     status: string,
+    open: boolean
 }
-export default class BookEdit extends Component<BookEProps, BookEDetails>{
+
+const styles = (theme: Theme) => ({
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    paper: {
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+    },
+})
+
+
+class BookEdit extends Component<BookEProps, BookEDetails>{
     constructor(props: BookEProps) {
         super(props)
         this.state = {
@@ -32,7 +52,8 @@ export default class BookEdit extends Component<BookEProps, BookEDetails>{
             genre: this.props.genre,
             author: this.props.author,
             description: this.props.description,
-            status: this.props.status
+            status: this.props.status,
+            open: false
         }
         this.toggle = this.toggle.bind(this)
     }
@@ -59,6 +80,7 @@ export default class BookEdit extends Component<BookEProps, BookEDetails>{
                 this.props.fetchBook()
                 console.log(bookToEdit)
                 this.toggle()
+                this.handleClose()
             })
         
     }
@@ -70,35 +92,56 @@ export default class BookEdit extends Component<BookEProps, BookEDetails>{
 
     }
 
+    handleOpen = () => {
+        this.setState({ open: true });
+    };
+
+    handleClose = () => {
+        this.setState({ open: false });
+    };
+
+
     render() {
+        const { classes } = this.props;
+
         return (
-            <div>
-                <Button onClick={this.toggle}>Edit this Book</Button>
-                <Form onSubmit={(e) => this.handleSubmit(e)}>
-                    <Modal
-                        isOpen={this.state.modal} fade={true} toggle={this.toggle}
-                    >
-                        <ModalHeader toggle={this.toggle}>
-                            <Label htmlFor="Title">Title:</Label>
-                            <Input onChange={(e) => this.setState({ title: e.target.value })} name="title" value={this.state.title} defaultValue={this.props.title} />
-                        </ModalHeader>
-                        <ModalBody>
-                            <Label>Genre: </Label>
-                            <Input onChange={(e) => this.setState({ genre: e.target.value })} name="genre" value={this.state.genre} />
-                            <Label>Author: </Label>
-                            <Input onChange={(e) => this.setState({ author: e.target.value })} name="author" value={this.state.author} />
-                            <Label>Description: </Label>
-                            <Input onChange={(e) => this.setState({ description: e.target.value })} name="description" value={this.state.description} />
-                            {/* <Label>Status</Label> */}
+            <div className="createModal">
+                <Button className={classes.modal} onClick={this.handleOpen}>Edit this Book</Button>
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    className={classes.modal}
+                    open={this.state.open}
+                    onClose={this.handleClose}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}
+                >
+                    <Fade in={this.state.open}>
+                        <div className={classes.paper}>
+                            <Label className="modalLabel"  htmlFor="Title">Title:</Label>
+                            <Input autoComplete="off" onChange={(e) => this.setState({ title: e.target.value })} name="title" value={this.state.title} defaultValue={this.state.title} />
+                            <Label className="modalLabel" >Genre: </Label>
+                            <Input autoComplete="off" onChange={(e) => this.setState({ genre: e.target.value })} name="genre" value={this.state.genre} />
+                            <Label className="modalLabel" >author: </Label>
+                            <Input autoComplete="off" onChange={(e) => this.setState({ author: e.target.value })} name="author" value={this.state.author} />
+                            <Label className="modalLabel" >Description: </Label>
+                            <Input autoComplete="off" onChange={(e) => this.setState({ description: e.target.value })} className='textInput' name="description" type="textarea" value={this.state.description} />
+                            {/* <Label className="modalLabel" >Status</Label> */}
                             {/* <Select onChange={(e)=> this.setState({status: e.target.value})} name="status" value={this.state.status}>
                             <MenuItem value=""><em>None</em></MenuItem>
                             <MenuItem></MenuItem>
                         </Select> */}
-                        </ModalBody>
-                        <Button type="submit" onClick={this.handleSubmit}>Submit</Button>
-                    </Modal>
-                </Form>
-            </div>
-        )
+                            <Button type="submit" onClick={this.handleSubmit} className="modalButtons" >Submit</Button>
+                        </div>
+                    </Fade>
+                </Modal>
+            </div >
+        );
     }
 }
+
+
+export default withStyles(styles, { withTheme: true })(BookEdit);

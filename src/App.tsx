@@ -6,16 +6,20 @@ import MediaDisplay from './Components/Media/MediaIndex'
 // import MediaIndex from './Components/Media/MediaIndex';
 import { Auth } from './Components/Auth/Auth';
 import RouteDom from './Components/Routes/Switch'
-import {BrowserRouter as Router} from 'react-router-dom';
+import {BrowserRouter as Router, Redirect} from 'react-router-dom';
 import { faWindowRestore } from '@fortawesome/free-solid-svg-icons';
 import  BigNavbar from './Components/Navbar/Navbar';
+import Footer from './Components/Footer'
+import {Route, Switch} from 'react-router-dom'
+import {MyPage} from './Components/MyMedia/MyPage'
+
 
 type CurrentSession = {
   sessionToken: string | null 
 }
 
 export class App extends Component<{}, CurrentSession> {
-  constructor(props: any) {
+  constructor(props: { }) {
     super(props);
     this.updateToken = this.updateToken.bind(this);
     this.clearToken = this.clearToken.bind(this);
@@ -58,14 +62,22 @@ export class App extends Component<{}, CurrentSession> {
   }
 
   render() {
-
+    
     return (
       <div className="App">
         <Router>
         <BigNavbar updateToken={this.updateToken} sessionToken={this.state.sessionToken} clearSession={this.clearToken}/>
-        <RouteDom updateToken={this.updateToken} sessionToken={this.state.sessionToken} clearSession={this.clearToken}/>
-        {this.protectedViews()}
+        <Switch>
+                    <Route exact path="/home"><App /></Route>
+                    <Route exact path="/">{this.state.sessionToken ? <Redirect to="/allMedia"/> : <Auth updateToken={this.updateToken}/> }</Route>
+                    <Route exact path="/allMedia"><MediaDisplay getToken={this.getToken} sessionToken={this.state.sessionToken}/></Route>
+                    <Route exact path="/myPage"><MyPage sessionToken={this.state.sessionToken}/></Route>
+        </Switch>
+
+        {/* <RouteDom updateToken={this.updateToken} sessionToken={this.state.sessionToken} clearSession={this.clearToken} getToken={this.getToken}/>
+        {this.protectedViews()} */}
         </Router>
+        <Footer />
       </div>
     );
   }
